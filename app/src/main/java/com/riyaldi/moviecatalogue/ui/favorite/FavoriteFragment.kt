@@ -1,18 +1,15 @@
 package com.riyaldi.moviecatalogue.ui.favorite
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.riyaldi.moviecatalogue.R
 import com.riyaldi.moviecatalogue.ui.favorite.movie.MovieFavoriteFragment
 import com.riyaldi.moviecatalogue.ui.favorite.tvshow.TvShowFavoriteFragment
 import com.riyaldi.moviecatalogue.ui.home.ViewpagerAdapter
-import com.riyaldi.moviecatalogue.ui.movies.MovieFragment
-import com.riyaldi.moviecatalogue.ui.tvshows.TvShowFragment
-import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_favorite.*
 
 class FavoriteFragment : Fragment() {
