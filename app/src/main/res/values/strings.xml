@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Movie Catalogue</string>
+    <string name="genre_duration">Genre | Duration</string>
+    <string name="overview">Overview</string>
+    <string name="overview_detail">Overview Detail</string>
+    <string name="poster">Poster</string>
+    <string name="genre">Genre</string>
+    <string name="film_title">Film Title</string>
+    <string name="image_backdrop">Image Backdrop</string>
+    <string name="genre_duration_text">%1$s | %2$s Minutes</string>
+    <string name="movie">MOVIE</string>
+    <string name="tv_show">TV SHOW</string>
+</resources>
