@@ -1,15 +1,15 @@
-package com.riyaldi.moviecatalogue.data.source.local.entity
+package com.riyaldi.moviecatalogue.data.source.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class MovieEntity(
+data class TvShowModel(
     @SerializedName("id")
     val id: Int,
-    @SerializedName("title")
-    val title: String,
+    @SerializedName("name")
+    val name: String,
     @SerializedName("poster_path")
     val posterPath: String,
     @SerializedName("vote_average")

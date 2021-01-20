@@ -11,19 +11,19 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.riyaldi.moviecatalogue.R
-import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
+import com.riyaldi.moviecatalogue.data.source.model.TvShowModel
 import com.riyaldi.moviecatalogue.databinding.ItemMovieBinding
 import com.riyaldi.moviecatalogue.utils.NetworkInfo.IMAGE_URL
 
 class TvShowAdapter: RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
     private lateinit var onItemClickCallback: OnItemClickCallback
-    private var tvShows = ArrayList<TvShowEntity>()
+    private var tvShows = ArrayList<TvShowModel>()
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
     }
 
-    fun setTvShows(tvShows: List<TvShowEntity>) {
+    fun setTvShows(tvShows: List<TvShowModel>) {
         if (tvShows.isNullOrEmpty()) return
         this.tvShows.clear()
         this.tvShows.addAll(tvShows)
@@ -41,7 +41,7 @@ class TvShowAdapter: RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
     override fun getItemCount(): Int = tvShows.size
 
     inner class TvShowViewHolder(private val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(tvShow: TvShowEntity) {
+        fun bind(tvShow: TvShowModel) {
             with(binding) {
                 tvTitle.text = tvShow.name
                 tvGenre.text = tvShow.voteAverage.toString()

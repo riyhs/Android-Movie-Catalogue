@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.verify
 import com.riyaldi.moviecatalogue.data.source.MovieCatalogueRepository
-import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
+import com.riyaldi.moviecatalogue.data.source.model.TvShowModel
 import com.riyaldi.moviecatalogue.utils.DataDummy
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -29,7 +29,7 @@ class TvShowViewModelTest {
     private lateinit var movieCatalogueRepository: MovieCatalogueRepository
 
     @Mock
-    private lateinit var observer: Observer<List<TvShowEntity>>
+    private lateinit var observer: Observer<List<TvShowModel>>
 
     @Before
     fun setUp() {
@@ -39,7 +39,7 @@ class TvShowViewModelTest {
     @Test
     fun getTvShows() {
         val dummyTvShow = DataDummy.getTvShows()
-        val tvShows = MutableLiveData<List<TvShowEntity>>()
+        val tvShows = MutableLiveData<List<TvShowModel>>()
         tvShows.value = dummyTvShow
 
         `when`(movieCatalogueRepository.getTvShows()).thenReturn(tvShows)

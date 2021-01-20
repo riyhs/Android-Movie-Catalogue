@@ -10,4 +10,9 @@
     <string name="genre_duration_text">%1$s | %2$s Minutes</string>
     <string name="movie">MOVIE</string>
     <string name="tv_show">TV SHOW</string>
+    <string name="movies">Movies</string>
+    <string name="tv_shows">Tv Shows</string>
+    <string name="favorites">Favorites</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

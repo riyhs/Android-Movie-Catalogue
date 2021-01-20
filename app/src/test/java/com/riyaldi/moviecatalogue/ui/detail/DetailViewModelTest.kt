@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.verify
 import com.riyaldi.moviecatalogue.data.source.MovieCatalogueRepository
-import com.riyaldi.moviecatalogue.data.source.local.entity.DetailEntity
+import com.riyaldi.moviecatalogue.data.source.model.DetailModel
 import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.MOVIE
 import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.TV_SHOW
 import com.riyaldi.moviecatalogue.utils.DataDummy
@@ -37,7 +37,7 @@ class DetailViewModelTest {
     private lateinit var movieCatalogueRepository: MovieCatalogueRepository
 
     @Mock
-    private lateinit var movieObserver: Observer<DetailEntity>
+    private lateinit var movieObserver: Observer<DetailModel>
 
     // Get Data Movie Testing
     @Before
@@ -47,12 +47,12 @@ class DetailViewModelTest {
 
     @Test
     fun getMovieDetail() {
-        val movie = MutableLiveData<DetailEntity>()
+        val movie = MutableLiveData<DetailModel>()
         movie.value = dummyMovie
 
         `when`(movieCatalogueRepository.getDetailMovie(dummyMovieId)).thenReturn(movie)
         viewModel.setFilm(dummyMovieId, MOVIE)
-        val detailEntity = viewModel.getDataDetail().value as DetailEntity
+        val detailEntity = viewModel.getDataDetail().value as DetailModel
         verify(movieCatalogueRepository).getDetailMovie(dummyMovieId)
 
         assertNotNull(detailEntity)
@@ -78,12 +78,12 @@ class DetailViewModelTest {
 
     @Test
     fun getTvShowDetail() {
-        val tvShow = MutableLiveData<DetailEntity>()
+        val tvShow = MutableLiveData<DetailModel>()
         tvShow.value = dummyTvShow
 
         `when`(movieCatalogueRepository.getDetailTvShow(dummyTvShowId)).thenReturn(tvShow)
         viewModel.setFilm(dummyTvShowId, TV_SHOW)
-        val detailEntity = viewModel.getDataDetail().value as DetailEntity
+        val detailEntity = viewModel.getDataDetail().value as DetailModel
         verify(movieCatalogueRepository).getDetailTvShow(dummyTvShowId)
 
         assertNotNull(detailEntity)
