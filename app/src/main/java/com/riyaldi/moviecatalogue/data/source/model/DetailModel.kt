@@ -1,11 +1,11 @@
-package com.riyaldi.moviecatalogue.data.source.local.entity
+package com.riyaldi.moviecatalogue.data.source.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class   DetailEntity(
+data class   DetailModel(
     @SerializedName("backdrop_path")
     val backdropPath: String,
     @SerializedName("genres")

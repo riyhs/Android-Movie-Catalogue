@@ -13,7 +13,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.appbar.AppBarLayout
 import com.riyaldi.moviecatalogue.R
-import com.riyaldi.moviecatalogue.data.source.local.entity.DetailEntity
+import com.riyaldi.moviecatalogue.data.source.model.DetailModel
 import com.riyaldi.moviecatalogue.databinding.ActivityDetailBinding
 import com.riyaldi.moviecatalogue.utils.NetworkInfo.IMAGE_URL
 import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
@@ -68,7 +68,7 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
         detailBinding.nestedScrollView.isInvisible = state
     }
 
-    private fun populateDataDetail(data: DetailEntity) {
+    private fun populateDataDetail(data: DetailModel) {
         val genre = data.genres.toString().replace("[", "").replace("]", "")
 
         val genreDurationText = resources.getString(R.string.genre_duration_text, genre, data.runtime.toString())

@@ -1,8 +1,8 @@
 package com.riyaldi.moviecatalogue.utils
 
-import com.riyaldi.moviecatalogue.data.source.local.entity.DetailEntity
-import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
-import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
+import com.riyaldi.moviecatalogue.data.source.model.DetailModel
+import com.riyaldi.moviecatalogue.data.source.model.MovieModel
+import com.riyaldi.moviecatalogue.data.source.model.TvShowModel
 import com.riyaldi.moviecatalogue.data.source.remote.response.movie.*
 import com.riyaldi.moviecatalogue.data.source.remote.response.movie.Genre
 import com.riyaldi.moviecatalogue.data.source.remote.response.movie.ProductionCompany
@@ -16,21 +16,21 @@ typealias TvShowProductionCountry = com.riyaldi.moviecatalogue.data.source.remot
 typealias TvShowSpokenLanguage = com.riyaldi.moviecatalogue.data.source.remote.response.tv.SpokenLanguage
 
 object DataDummy {
-    fun getMovies(): List<MovieEntity> {
+    fun getMovies(): List<MovieModel> {
         return listOf(
-            MovieEntity(
+            MovieModel(
                 464052,
                 "Wonder Woman 1984",
                 "/8UlWHLMpgZm9bx6QYh0NFoq67TZ.jpg",
                 7.2
             ),
-            MovieEntity(
+            MovieModel(
                 508442,
                 "Soul",
                 "/hm58Jw4Lw8OIeECIq5qyPYhAeRJ.jpg",
                 8.4
             ),
-            MovieEntity(
+            MovieModel(
                 517096,
                 "Cosmoball",
                 "/eDJYDXRoWoUzxjd52gtz5ODTSU1.jpg",
@@ -39,8 +39,8 @@ object DataDummy {
         )
     }
 
-    fun getDetailMovie(): DetailEntity {
-        return DetailEntity(
+    fun getDetailMovie(): DetailModel {
+        return DetailModel(
                 "/srYya1ZlI97Au4jUYAktDe3avyA.jpg",
                 listOf("Fantasy", "Action", "Adventure"),
                 468552,
@@ -53,21 +53,21 @@ object DataDummy {
         )
     }
 
-    fun getTvShows(): List<TvShowEntity> {
+    fun getTvShows(): List<TvShowModel> {
         return listOf(
-            TvShowEntity(
+            TvShowModel(
                 77169,
                 "Cobra Kai",
                 "/obLBdhLxheKg8Li1qO11r2SwmYO.jpg",
                 8.1
             ),
-            TvShowEntity(
+            TvShowModel(
                 44217,
                 "Vikings",
                 "/bQLrHIRNEkE3PdIWQrZHynQZazu.jpg",
                 8.0
             ),
-            TvShowEntity(
+            TvShowModel(
                 82856,
                 "The Mandalorian",
                 "/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg",
@@ -76,8 +76,8 @@ object DataDummy {
         )
     }
 
-    fun getDetailTvShow(): DetailEntity {
-        return DetailEntity(
+    fun getDetailTvShow(): DetailModel {
+        return DetailModel(
                 "/gL8myjGc2qrmqVosyGm5CWTir9A.jpg",
                 listOf("Drama", "Action", "Adventure"),
                 77169,
