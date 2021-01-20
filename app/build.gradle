@@ -61,6 +61,8 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.palette:palette-ktx:$paletteVersion"
     implementation "androidx.activity:activity-ktx:1.1.0"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     //retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"

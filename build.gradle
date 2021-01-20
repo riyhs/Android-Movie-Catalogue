@@ -34,6 +34,7 @@ ext {
     retrofitVersion = '2.9.0'
     okhttpVersion = '4.9.0'
     idlingResVersion = '3.3.0'
+    nav_version = '2.3.2'
 
     archLifecycleVersion = '2.1.0'
 }

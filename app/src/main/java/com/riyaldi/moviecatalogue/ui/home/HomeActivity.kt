@@ -2,28 +2,40 @@ package com.riyaldi.moviecatalogue.ui.home
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.tabs.TabLayoutMediator
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import com.riyaldi.moviecatalogue.R
-import com.riyaldi.moviecatalogue.ui.movies.MovieFragment
-import com.riyaldi.moviecatalogue.ui.tvshows.TvShowFragment
-import kotlinx.android.synthetic.main.activity_home.*
+import com.riyaldi.moviecatalogue.databinding.ActivityHomeBinding
+
 
 class HomeActivity : AppCompatActivity() {
+
+    private var _activityMainBinding: ActivityHomeBinding? = null
+    private val binding get() = _activityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
 
-        setViewPager()
+        _activityMainBinding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
+
+        setupBottomNav()
     }
 
-    private fun setViewPager() {
-        val fragmentList = listOf(MovieFragment(), TvShowFragment())
-        val tabTitle = listOf(resources.getString(R.string.movie), resources.getString(R.string.tv_show))
-
-        viewpager.adapter = ViewpagerAdapter(fragmentList, this.supportFragmentManager, lifecycle)
-
-        TabLayoutMediator(tabLayout2, viewpager){tab, position ->
-            tab.text = tabTitle[position]
-        }.attach()
+    private fun setupBottomNav() {
+        val bottomNavigationView = binding?.bottomNavMain
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_main) as NavHostFragment
+        if (bottomNavigationView != null) {
+            NavigationUI.setupWithNavController(
+                bottomNavigationView,
+                navHostFragment.navController
+            )
+        }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _activityMainBinding = null
+    }
+
 }
