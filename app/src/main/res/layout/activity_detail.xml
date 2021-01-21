@@ -29,7 +29,7 @@
             android:layout_height="500dp"
             android:textSize="34sp"
             app:title="Title"
-            app:expandedTitleMarginBottom="94dp"
+            app:expandedTitleMarginBottom="116dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="?colorPrimary">
 
@@ -104,7 +104,7 @@
                         android:id="@+id/tv_detail_genre_duration"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="32dp"
                         android:text="@string/genre_duration"
                         android:textColor="@android:color/primary_text_dark"
                         android:textSize="16sp"
@@ -143,5 +143,18 @@
             </androidx.cardview.widget.CardView>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_to_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="32dp"
+        android:elevation="8dp"
+        android:src="@drawable/ic_favorite_border"
+        android:contentDescription="@string/add_to_favorite"
+        app:layout_anchor="@id/card_detail"
+        app:layout_anchorGravity="top|right|end"
+        app:backgroundTint="@color/white"
+        tools:ignore="RtlHardcoded" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

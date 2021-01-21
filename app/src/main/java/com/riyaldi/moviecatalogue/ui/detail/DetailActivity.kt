@@ -3,11 +3,9 @@ package com.riyaldi.moviecatalogue.ui.detail
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -29,7 +27,7 @@ import com.riyaldi.moviecatalogue.vo.Status
 import kotlin.math.abs
 
 
-class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
+class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, View.OnClickListener {
 
     companion object {
         const val EXTRA_FILM = "extra_film"
@@ -40,7 +38,6 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
     private lateinit var viewModel: DetailViewModel
     private var dataCategory: String? = null
 
-    private var menu: Menu? = null
     private val percentageToShowImage = 20
     private var mMaxScrollSize = 0
     private var mIsImageHidden = false
@@ -60,6 +57,8 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
         val factory = ViewModelFactory.getInstance(this)
         viewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
 
+        detailBinding.fabAddToFavorite.setOnClickListener(this)
+
         val extras = intent.extras
         if (extras != null) {
             val dataId = extras.getString(EXTRA_FILM)
@@ -67,6 +66,7 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
 
             if (dataId != null && dataCategory != null) {
                 viewModel.setFilm(dataId, dataCategory.toString())
+                setupState()
                 if (dataCategory == MOVIE) {
                     viewModel.getDetailMovie().observe(this, { detail ->
                         when(detail.status) {
@@ -103,6 +103,14 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
             }
         }
 
+    }
+
+    override fun onClick(v: View?) {
+        when(v?.id) {
+            R.id.fab_add_to_favorite -> {
+                onFabClicked()
+            }
+        }
     }
 
     @JvmName("populateDataDetailForMovie")
@@ -171,10 +179,7 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.bookmark_menu, menu)
-        this.menu = menu
-
+    private fun setupState(){
         if (dataCategory == MOVIE) {
             viewModel.getDetailMovie().observe(this, { movie ->
                 when(movie.status) {
@@ -210,29 +215,22 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
                 }
             })
         }
-        return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_bookmark) {
-            if (dataCategory == MOVIE) {
-                viewModel.setFavoriteMovie()
-                return true
-            } else if (dataCategory == TV_SHOW) {
-                viewModel.setFavoriteTvShow()
-                return true
-            }
+    private fun onFabClicked() {
+        if (dataCategory == MOVIE) {
+            viewModel.setFavoriteMovie()
+        } else if (dataCategory == TV_SHOW) {
+            viewModel.setFavoriteTvShow()
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun setFavoriteState(state: Boolean) {
-        if (menu == null) return
-        val menuItem = menu?.findItem(R.id.action_bookmark)
+        val fab = detailBinding.fabAddToFavorite
         if (state) {
-            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_favorite_filled)
+            fab.setImageResource(R.drawable.ic_favorite_filled)
         } else {
-            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_favorite_border)
+            fab.setImageResource(R.drawable.ic_favorite_border)
         }
     }
 
@@ -240,6 +238,7 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
         detailBinding.progressBar.isVisible = state
         detailBinding.appbar.isInvisible = state
         detailBinding.nestedScrollView.isInvisible = state
+        detailBinding.fabAddToFavorite.isInvisible = state
     }
 
     private fun setColorByPalette(poster: Bitmap) {
