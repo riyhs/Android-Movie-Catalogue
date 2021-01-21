@@ -8,6 +8,7 @@ import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.riyaldi.moviecatalogue.R
@@ -49,6 +50,7 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                 Glide.with(itemView.context)
                         .asBitmap()
                         .load(IMAGE_URL + movie.posterPath)
+                        .apply(RequestOptions.placeholderOf(R.drawable.ic_movie_poster_placeholder))
                         .transform(RoundedCorners(28))
                         .into(object : CustomTarget<Bitmap>() {
                             override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {

@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.appbar.AppBarLayout
@@ -118,6 +119,7 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
 
                 Glide.with(this@DetailActivity)
                         .asBitmap()
+                        .apply(RequestOptions.placeholderOf(R.drawable.ic_movie_poster_placeholder))
                         .load(IMAGE_URL + this.posterPath)
                         .into(object : CustomTarget<Bitmap>() {
                             override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
@@ -130,6 +132,7 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
 
                 Glide.with(this@DetailActivity)
                         .load(IMAGE_URL + this.backdropPath)
+                        .apply(RequestOptions.placeholderOf(R.drawable.ic_movie_poster_placeholder))
                         .into(detailBinding.ivBackdrop)
 
                 detailBinding.ivDetail.tag = this.posterPath
