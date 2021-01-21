@@ -6,6 +6,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -16,6 +17,7 @@ import com.riyaldi.moviecatalogue.ui.detail.DetailActivity
 import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.MOVIE
 import com.riyaldi.moviecatalogue.utils.MarginItemDecoration
 import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
+import com.riyaldi.moviecatalogue.vo.Status
 
 class MovieFragment : Fragment(), MovieAdapter.OnItemClickCallback {
 
@@ -31,16 +33,26 @@ class MovieFragment : Fragment(), MovieAdapter.OnItemClickCallback {
         if (activity != null) {
 
             showProgressBar(true)
-
             val factory = ViewModelFactory.getInstance(requireActivity())
             val viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
-            val movieAdapter = MovieAdapter()
 
+            val movieAdapter = MovieAdapter()
             viewModel.getMovies().observe(viewLifecycleOwner, { movies ->
-                showProgressBar(false)
-                movieAdapter.setMovies(movies)
-                movieAdapter.setOnItemClickCallback(this)
-                movieAdapter.notifyDataSetChanged()
+                if (movies != null) {
+                    when(movies.status) {
+                        Status.LOADING -> showProgressBar(true)
+                        Status.SUCCESS -> {
+                            showProgressBar(false)
+                            movieAdapter.setMovies(movies.data)
+                            movieAdapter.setOnItemClickCallback(this)
+                            movieAdapter.notifyDataSetChanged()
+                        }
+                        Status.ERROR -> {
+                            showProgressBar(false)
+                            Toast.makeText(context, "Terjadi kesalahan", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
             })
 
             val marginVertical = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, resources.displayMetrics)

@@ -16,11 +16,11 @@ class DetailViewModel(private val movieCatalogueRepository: MovieCatalogueReposi
     fun setFilm(id: String, category: String) {
         when (category) {
             TV_SHOW -> {
-                detailData = movieCatalogueRepository.getDetailTvShow(id)
+//                detailData = movieCatalogueRepository.getDetailTvShow(id)
             }
 
             MOVIE -> {
-                detailData = movieCatalogueRepository.getDetailMovie(id)
+//                detailData = movieCatalogueRepository.getDetailMovie(id)
             }
         }
     }

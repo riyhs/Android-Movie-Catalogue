@@ -11,19 +11,19 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.riyaldi.moviecatalogue.R
-import com.riyaldi.moviecatalogue.data.source.model.MovieModel
+import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
 import com.riyaldi.moviecatalogue.databinding.ItemMovieBinding
 import com.riyaldi.moviecatalogue.utils.NetworkInfo.IMAGE_URL
 
 class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     private lateinit var onItemClickCallback: OnItemClickCallback
-    private var movies = ArrayList<MovieModel>()
+    private var movies = ArrayList<MovieEntity>()
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
     }
 
-    fun setMovies(movies: List<MovieModel>){
+    fun setMovies(movies: List<MovieEntity>?){
         if (movies.isNullOrEmpty()) return
         this.movies.clear()
         this.movies.addAll(movies)
@@ -41,7 +41,7 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     override fun getItemCount(): Int = movies.size
 
     inner class MovieViewHolder(private val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: MovieModel) {
+        fun bind(movie: MovieEntity) {
             with(binding) {
                 tvTitle.text = movie.title
                 tvGenre.text = movie.voteAverage.toString()
