@@ -7,7 +7,9 @@ import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
 import com.riyaldi.moviecatalogue.data.source.remote.ApiResponse
 import com.riyaldi.moviecatalogue.data.source.remote.RemoteDataSource
 import com.riyaldi.moviecatalogue.data.source.remote.response.movie.Movie
+import com.riyaldi.moviecatalogue.data.source.remote.response.movie.MovieDetailResponse
 import com.riyaldi.moviecatalogue.data.source.remote.response.tv.TvShow
+import com.riyaldi.moviecatalogue.data.source.remote.response.tv.TvShowDetailResponse
 import com.riyaldi.moviecatalogue.utils.AppExecutors
 import com.riyaldi.moviecatalogue.vo.Resource
 
@@ -59,32 +61,39 @@ class MovieCatalogueRepository private constructor(
     }
 
     override fun getDetailMovie(movieId: Int): LiveData<Resource<MovieEntity>> {
-        return object : NetworkBoundResource<MovieEntity, List<Movie>>(appExecutors) {
+        return object : NetworkBoundResource<MovieEntity, MovieDetailResponse>(appExecutors) {
             override fun loadFromDb(): LiveData<MovieEntity> = localDataSource.getMovieById(movieId)
 
-            override fun shouldFetch(data: MovieEntity?): Boolean = data == null
+            override fun shouldFetch(data: MovieEntity?): Boolean =
+                    data != null && data.runtime == 0 && data.genres == ""
 
-            override fun createCall(): LiveData<ApiResponse<List<Movie>>> =
-                remoteDataSource.getMovies()
+            override fun createCall(): LiveData<ApiResponse<MovieDetailResponse>> =
+                remoteDataSource.getDetailMovie(movieId.toString())
 
-            override fun saveCallResult(data: List<Movie>) {
-                val resultMovie = ArrayList<MovieEntity>()
-                for (response in data) {
-                    val movie = MovieEntity(
-                        id = response.id,
-                        backdropPath = response.backdropPath,
-                        genres = "",
-                        overview = response.overview,
-                        posterPath = response.posterPath,
-                        releaseDate = response.releaseDate,
-                        runtime = 0,
-                        title = response.title,
-                        voteAverage = response.voteAverage,
-                        isFav = false
-                    )
-                    resultMovie.add(movie)
+            override fun saveCallResult(data: MovieDetailResponse) {
+                val genres = StringBuilder().append("")
+
+                for (i in data.genres.indices) {
+                    if (i < data.genres.size - 1) {
+                        genres.append("${data.genres[i].name}, ")
+                    } else {
+                        genres.append(data.genres[i].name)
+                    }
                 }
-                localDataSource.insertMovies(resultMovie)
+
+                val movie = MovieEntity(
+                    id = data.id,
+                    backdropPath = data.backdropPath,
+                    genres = genres.toString(),
+                    overview = data.overview,
+                    posterPath = data.posterPath,
+                    releaseDate = data.releaseDate,
+                    runtime = data.runtime,
+                    title = data.title,
+                    voteAverage = data.voteAverage,
+                    isFav = false
+                )
+                localDataSource.updateMovie(movie, false)
             }
         }.asLiveData()
     }
@@ -122,32 +131,39 @@ class MovieCatalogueRepository private constructor(
     }
 
     override fun getDetailTvShow(tvShowId: Int): LiveData<Resource<TvShowEntity>> {
-        return object : NetworkBoundResource<TvShowEntity, List<TvShow>>(appExecutors) {
+        return object : NetworkBoundResource<TvShowEntity, TvShowDetailResponse>(appExecutors) {
             override fun loadFromDb(): LiveData<TvShowEntity> = localDataSource.getTvShowById(tvShowId)
 
-            override fun shouldFetch(data: TvShowEntity?): Boolean = data == null
+            override fun shouldFetch(data: TvShowEntity?): Boolean =
+                    data != null && data.runtime == 0 && data.genres == ""
 
-            override fun createCall(): LiveData<ApiResponse<List<TvShow>>> =
-                    remoteDataSource.getTvShows()
+            override fun createCall(): LiveData<ApiResponse<TvShowDetailResponse>> =
+                    remoteDataSource.getDetailTvShow(tvShowId.toString())
 
-            override fun saveCallResult(data: List<TvShow>) {
-                val resultTvShow = ArrayList<TvShowEntity>()
-                for (response in data) {
-                    val movie = TvShowEntity(
-                            id = response.id,
-                            backdropPath = response.backdropPath,
-                            genres = "",
-                            overview = response.overview,
-                            posterPath = response.posterPath,
-                            releaseDate = response.firstAirDate,
-                            runtime = 0,
-                            name = response.name,
-                            voteAverage = response.voteAverage,
-                            isFav = false
-                    )
-                    resultTvShow.add(movie)
+            override fun saveCallResult(data: TvShowDetailResponse) {
+                val genres = StringBuilder().append("")
+
+                for (i in data.genres.indices) {
+                    if (i < data.genres.size - 1) {
+                        genres.append("${data.genres[i].name}, ")
+                    } else {
+                        genres.append(data.genres[i].name)
+                    }
                 }
-                localDataSource.insertTvShows(resultTvShow)
+
+                val tvShow = TvShowEntity(
+                        id = data.id,
+                        backdropPath = data.backdropPath,
+                        genres = genres.toString(),
+                        overview = data.overview,
+                        posterPath = data.posterPath,
+                        releaseDate = data.firstAirDate,
+                        runtime = data.episodeRunTime.first(),
+                        name = data.name,
+                        voteAverage = data.voteAverage,
+                        isFav = false
+                )
+                localDataSource.updateTvShow(tvShow, false)
             }
         }.asLiveData()
     }

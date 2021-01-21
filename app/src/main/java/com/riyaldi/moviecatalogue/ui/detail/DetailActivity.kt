@@ -13,10 +13,14 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.appbar.AppBarLayout
 import com.riyaldi.moviecatalogue.R
-import com.riyaldi.moviecatalogue.data.source.model.DetailModel
+import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
+import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
 import com.riyaldi.moviecatalogue.databinding.ActivityDetailBinding
+import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.MOVIE
+import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.TV_SHOW
 import com.riyaldi.moviecatalogue.utils.NetworkInfo.IMAGE_URL
 import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
+import com.riyaldi.moviecatalogue.vo.Resource
 import kotlin.math.abs
 
 
@@ -54,51 +58,92 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
 
             if (dataId != null && dataCategory != null) {
                 viewModel.setFilm(dataId, dataCategory)
-                viewModel.getDataDetail().observe(this, { detail ->
-                    populateDataDetail(detail)
-                })
+                if (dataCategory == MOVIE) {
+                    viewModel.getDetailMovie().observe(this, { detail ->
+                        populateDataDetail(detail)
+                    })
+                } else if (dataCategory == TV_SHOW) {
+                    viewModel.getDetailTvShow().observe(this, { detail ->
+                        populateDataDetail(detail)
+                    })
+                }
             }
         }
 
+    }
+
+    @JvmName("populateDataDetailForMovie")
+    private fun populateDataDetail(detail: Resource<MovieEntity>) {
+        with(detail.data) {
+            if (this != null) {
+                val genreDurationText = resources.getString(R.string.genre_duration_text, this.genres, this.runtime.toString())
+
+                detailBinding.tvDetailGenreDuration.text = genreDurationText
+                detailBinding.collapsing.title = this.title
+                detailBinding.tvDetailOverview.text = this.overview
+
+                Glide.with(this@DetailActivity)
+                        .asBitmap()
+                        .load(IMAGE_URL + this.posterPath)
+                        .into(object : CustomTarget<Bitmap>() {
+                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                detailBinding.ivDetail.setImageBitmap(resource)
+                                setColorByPalette(resource)
+                            }
+
+                            override fun onLoadCleared(placeholder: Drawable?) {}
+                        })
+
+                Glide.with(this@DetailActivity)
+                        .load(IMAGE_URL + this.backdropPath)
+                        .into(detailBinding.ivBackdrop)
+
+                detailBinding.ivDetail.tag = this.posterPath
+                detailBinding.ivBackdrop.tag = this.backdropPath
+
+                showProgressBar(false)
+            }
+        }
+    }
+
+    @JvmName("populateDataDetailForTvShow")
+    private fun populateDataDetail(detail: Resource<TvShowEntity>) {
+        with(detail.data) {
+            if (this != null) {
+                val genreDurationText = resources.getString(R.string.genre_duration_text, this.genres, this.runtime.toString())
+
+                detailBinding.tvDetailGenreDuration.text = genreDurationText
+                detailBinding.collapsing.title = this.name
+                detailBinding.tvDetailOverview.text = this.overview
+
+                Glide.with(this@DetailActivity)
+                        .asBitmap()
+                        .load(IMAGE_URL + this.posterPath)
+                        .into(object : CustomTarget<Bitmap>() {
+                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                detailBinding.ivDetail.setImageBitmap(resource)
+                                setColorByPalette(resource)
+                            }
+
+                            override fun onLoadCleared(placeholder: Drawable?) {}
+                        })
+
+                Glide.with(this@DetailActivity)
+                        .load(IMAGE_URL + this.backdropPath)
+                        .into(detailBinding.ivBackdrop)
+
+                detailBinding.ivDetail.tag = this.posterPath
+                detailBinding.ivBackdrop.tag = this.backdropPath
+
+                showProgressBar(false)
+            }
+        }
     }
 
     private fun showProgressBar(state: Boolean) {
         detailBinding.progressBar.isVisible = state
         detailBinding.appbar.isInvisible = state
         detailBinding.nestedScrollView.isInvisible = state
-    }
-
-    private fun populateDataDetail(data: DetailModel) {
-        val genre = data.genres.toString().replace("[", "").replace("]", "")
-
-        val genreDurationText = resources.getString(R.string.genre_duration_text, genre, data.runtime.toString())
-
-        detailBinding.tvDetailGenreDuration.text = genreDurationText
-        detailBinding.collapsing.title = data.title
-        detailBinding.tvDetailOverview.text = data.overview
-
-        Glide.with(this)
-                .asBitmap()
-                .load(IMAGE_URL + data.posterPath)
-                .into(object : CustomTarget<Bitmap>() {
-                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                        detailBinding.ivDetail.setImageBitmap(resource)
-                        setColorByPalette(resource)
-                    }
-
-                    override fun onLoadCleared(placeholder: Drawable?) {
-
-                    }
-                })
-
-        Glide.with(this)
-                .load(IMAGE_URL + data.backdropPath)
-                .into(detailBinding.ivBackdrop)
-
-        detailBinding.ivDetail.tag = data.posterPath
-        detailBinding.ivBackdrop.tag = data.backdropPath
-
-        showProgressBar(false)
     }
 
     private fun setColorByPalette(poster: Bitmap) {
