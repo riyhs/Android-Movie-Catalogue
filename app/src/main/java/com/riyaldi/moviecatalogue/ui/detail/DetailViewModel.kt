@@ -28,6 +28,22 @@ class DetailViewModel(private val movieCatalogueRepository: MovieCatalogueReposi
         }
     }
 
+    fun setFavoriteMovie() {
+        val resource = detailMovie.value
+        if (resource?.data != null) {
+            val newState = !resource.data.isFav
+            movieCatalogueRepository.setFavoriteMovie(resource.data, newState)
+        }
+    }
+
+    fun setFavoriteTvShow() {
+        val resource = detailTvShow.value
+        if (resource?.data != null) {
+            val newState = !resource.data.isFav
+            movieCatalogueRepository.setFavoriteTvShow(resource.data, newState)
+        }
+    }
+
     fun getDetailTvShow() = detailTvShow
     fun getDetailMovie() = detailMovie
 

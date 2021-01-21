@@ -3,7 +3,11 @@ package com.riyaldi.moviecatalogue.ui.detail
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -21,7 +25,7 @@ import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.MOVIE
 import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.TV_SHOW
 import com.riyaldi.moviecatalogue.utils.NetworkInfo.IMAGE_URL
 import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
-import com.riyaldi.moviecatalogue.vo.Resource
+import com.riyaldi.moviecatalogue.vo.Status
 import kotlin.math.abs
 
 
@@ -33,6 +37,10 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
     }
 
     private lateinit var detailBinding: ActivityDetailBinding
+    private lateinit var viewModel: DetailViewModel
+    private var dataCategory: String? = null
+
+    private var menu: Menu? = null
     private val percentageToShowImage = 20
     private var mMaxScrollSize = 0
     private var mIsImageHidden = false
@@ -50,22 +58,46 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
         detailBinding.appbar.addOnOffsetChangedListener(this)
 
         val factory = ViewModelFactory.getInstance(this)
-        val viewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
+        viewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
 
         val extras = intent.extras
         if (extras != null) {
             val dataId = extras.getString(EXTRA_FILM)
-            val dataCategory = extras.getString(EXTRA_CATEGORY)
+            dataCategory = extras.getString(EXTRA_CATEGORY)
 
             if (dataId != null && dataCategory != null) {
-                viewModel.setFilm(dataId, dataCategory)
+                viewModel.setFilm(dataId, dataCategory.toString())
                 if (dataCategory == MOVIE) {
                     viewModel.getDetailMovie().observe(this, { detail ->
-                        populateDataDetail(detail)
+                        when(detail.status) {
+                            Status.LOADING -> showProgressBar(true)
+                            Status.SUCCESS -> {
+                                if (detail.data != null) {
+                                    showProgressBar(false)
+                                    populateDataDetail(detail.data)
+                                }
+                            }
+                            Status.ERROR -> {
+                                showProgressBar(false)
+                                Toast.makeText(applicationContext, "Terjadi kesalahan", Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     })
                 } else if (dataCategory == TV_SHOW) {
                     viewModel.getDetailTvShow().observe(this, { detail ->
-                        populateDataDetail(detail)
+                        when(detail.status) {
+                            Status.LOADING -> showProgressBar(true)
+                            Status.SUCCESS -> {
+                                if (detail.data != null) {
+                                    showProgressBar(false)
+                                    populateDataDetail(detail.data)
+                                }
+                            }
+                            Status.ERROR -> {
+                                showProgressBar(false)
+                                Toast.makeText(applicationContext, "Terjadi kesalahan", Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     })
                 }
             }
@@ -74,72 +106,133 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
     }
 
     @JvmName("populateDataDetailForMovie")
-    private fun populateDataDetail(detail: Resource<MovieEntity>) {
-        with(detail.data) {
-            if (this != null) {
-                val genreDurationText = resources.getString(R.string.genre_duration_text, this.genres, this.runtime.toString())
+    private fun populateDataDetail(movie: MovieEntity) {
+        with(movie) {
+            val genreDurationText = resources.getString(R.string.genre_duration_text, this.genres, this.runtime.toString())
 
-                detailBinding.tvDetailGenreDuration.text = genreDurationText
-                detailBinding.collapsing.title = this.title
-                detailBinding.tvDetailOverview.text = this.overview
+            detailBinding.tvDetailGenreDuration.text = genreDurationText
+            detailBinding.collapsing.title = this.title
+            detailBinding.tvDetailOverview.text = this.overview
 
-                Glide.with(this@DetailActivity)
-                        .asBitmap()
-                        .load(IMAGE_URL + this.posterPath)
-                        .into(object : CustomTarget<Bitmap>() {
-                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                                detailBinding.ivDetail.setImageBitmap(resource)
-                                setColorByPalette(resource)
-                            }
+            Glide.with(this@DetailActivity)
+                    .asBitmap()
+                    .load(IMAGE_URL + this.posterPath)
+                    .into(object : CustomTarget<Bitmap>() {
+                        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                            detailBinding.ivDetail.setImageBitmap(resource)
+                            setColorByPalette(resource)
+                        }
 
-                            override fun onLoadCleared(placeholder: Drawable?) {}
-                        })
+                        override fun onLoadCleared(placeholder: Drawable?) {}
+                    })
 
-                Glide.with(this@DetailActivity)
-                        .load(IMAGE_URL + this.backdropPath)
-                        .into(detailBinding.ivBackdrop)
+            Glide.with(this@DetailActivity)
+                    .load(IMAGE_URL + this.backdropPath)
+                    .into(detailBinding.ivBackdrop)
 
-                detailBinding.ivDetail.tag = this.posterPath
-                detailBinding.ivBackdrop.tag = this.backdropPath
+            detailBinding.ivDetail.tag = this.posterPath
+            detailBinding.ivBackdrop.tag = this.backdropPath
 
-                showProgressBar(false)
-            }
+            showProgressBar(false)
         }
     }
 
     @JvmName("populateDataDetailForTvShow")
-    private fun populateDataDetail(detail: Resource<TvShowEntity>) {
-        with(detail.data) {
-            if (this != null) {
-                val genreDurationText = resources.getString(R.string.genre_duration_text, this.genres, this.runtime.toString())
+    private fun populateDataDetail(tvShow: TvShowEntity) {
+        with(tvShow) {
+            val genreDurationText = resources.getString(R.string.genre_duration_text, this.genres, this.runtime.toString())
 
-                detailBinding.tvDetailGenreDuration.text = genreDurationText
-                detailBinding.collapsing.title = this.name
-                detailBinding.tvDetailOverview.text = this.overview
+            detailBinding.tvDetailGenreDuration.text = genreDurationText
+            detailBinding.collapsing.title = this.name
+            detailBinding.tvDetailOverview.text = this.overview
 
-                Glide.with(this@DetailActivity)
-                        .asBitmap()
-                        .apply(RequestOptions.placeholderOf(R.drawable.ic_movie_poster_placeholder))
-                        .load(IMAGE_URL + this.posterPath)
-                        .into(object : CustomTarget<Bitmap>() {
-                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                                detailBinding.ivDetail.setImageBitmap(resource)
-                                setColorByPalette(resource)
-                            }
+            Glide.with(this@DetailActivity)
+                    .asBitmap()
+                    .apply(RequestOptions.placeholderOf(R.drawable.ic_movie_poster_placeholder))
+                    .load(IMAGE_URL + this.posterPath)
+                    .into(object : CustomTarget<Bitmap>() {
+                        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                            detailBinding.ivDetail.setImageBitmap(resource)
+                            setColorByPalette(resource)
+                        }
 
-                            override fun onLoadCleared(placeholder: Drawable?) {}
-                        })
+                        override fun onLoadCleared(placeholder: Drawable?) {}
+                    })
 
-                Glide.with(this@DetailActivity)
-                        .load(IMAGE_URL + this.backdropPath)
-                        .apply(RequestOptions.placeholderOf(R.drawable.ic_movie_poster_placeholder))
-                        .into(detailBinding.ivBackdrop)
+            Glide.with(this@DetailActivity)
+                    .load(IMAGE_URL + this.backdropPath)
+                    .apply(RequestOptions.placeholderOf(R.drawable.ic_movie_poster_placeholder))
+                    .into(detailBinding.ivBackdrop)
 
-                detailBinding.ivDetail.tag = this.posterPath
-                detailBinding.ivBackdrop.tag = this.backdropPath
+            detailBinding.ivDetail.tag = this.posterPath
+            detailBinding.ivBackdrop.tag = this.backdropPath
 
-                showProgressBar(false)
+            showProgressBar(false)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.bookmark_menu, menu)
+        this.menu = menu
+
+        if (dataCategory == MOVIE) {
+            viewModel.getDetailMovie().observe(this, { movie ->
+                when(movie.status) {
+                    Status.LOADING -> showProgressBar(true)
+                    Status.SUCCESS -> {
+                        if (movie.data != null) {
+                            showProgressBar(false)
+                            val state = movie.data.isFav
+                            setFavoriteState(state)
+                        }
+                    }
+                    Status.ERROR -> {
+                        showProgressBar(false)
+                        Toast.makeText(applicationContext, "Terjadi kesalahan", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
+        } else if (dataCategory == TV_SHOW) {
+            viewModel.getDetailTvShow().observe(this, { tvShow ->
+                when(tvShow.status) {
+                    Status.LOADING -> showProgressBar(true)
+                    Status.SUCCESS -> {
+                        if (tvShow.data != null) {
+                            showProgressBar(false)
+                            val state = tvShow.data.isFav
+                            setFavoriteState(state)
+                        }
+                    }
+                    Status.ERROR -> {
+                        showProgressBar(false)
+                        Toast.makeText(applicationContext, "Terjadi kesalahan", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_bookmark) {
+            if (dataCategory == MOVIE) {
+                viewModel.setFavoriteMovie()
+                return true
+            } else if (dataCategory == TV_SHOW) {
+                viewModel.setFavoriteTvShow()
+                return true
             }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun setFavoriteState(state: Boolean) {
+        if (menu == null) return
+        val menuItem = menu?.findItem(R.id.action_bookmark)
+        if (state) {
+            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_favorite_filled)
+        } else {
+            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_favorite_border)
         }
     }
 

@@ -98,6 +98,15 @@ class MovieCatalogueRepository private constructor(
         }.asLiveData()
     }
 
+    override fun getFavoriteMovies(): LiveData<List<MovieEntity>> =
+            localDataSource.getFavMovies()
+
+    override fun setFavoriteMovie(movie: MovieEntity, state: Boolean) {
+        appExecutors.diskIO().execute {
+            localDataSource.setFavoriteMovie(movie, state)
+        }
+    }
+
     override fun getTvShows(): LiveData<Resource<List<TvShowEntity>>> {
         return object : NetworkBoundResource<List<TvShowEntity>, List<TvShow>>(appExecutors) {
             override fun loadFromDb(): LiveData<List<TvShowEntity>> = localDataSource.getAllTvShows()
@@ -166,5 +175,14 @@ class MovieCatalogueRepository private constructor(
                 localDataSource.updateTvShow(tvShow, false)
             }
         }.asLiveData()
+    }
+
+    override fun getFavoriteTvShows(): LiveData<List<TvShowEntity>> =
+            localDataSource.getFavTvShows()
+
+    override fun setFavoriteTvShow(tvShow: TvShowEntity, state: Boolean) {
+        appExecutors.diskIO().execute {
+            localDataSource.setFavoriteTvShow(tvShow, state)
+        }
     }
 }

@@ -27,12 +27,22 @@ class LocalDataSource private constructor(private val mFilmDao: FilmDao) {
 
     fun insertMovies(movies: List<MovieEntity>) = mFilmDao.insertMovies(movies)
 
+    fun setFavoriteMovie(movie: MovieEntity, newState: Boolean) {
+        movie.isFav = newState
+        mFilmDao.updateMovie(movie)
+    }
+
     fun updateMovie(movie: MovieEntity, newState: Boolean) {
         movie.isFav = newState
         mFilmDao.updateMovie(movie)
     }
 
     fun insertTvShows(tvShows: List<TvShowEntity>) = mFilmDao.insertTvShows(tvShows)
+
+    fun setFavoriteTvShow(tvShow: TvShowEntity, newState: Boolean) {
+        tvShow.isFav = newState
+        mFilmDao.updateTvShow(tvShow)
+    }
 
     fun updateTvShow(tvShow: TvShowEntity, newState: Boolean) {
         tvShow.isFav = newState
