@@ -75,10 +75,6 @@ class TvShowAdapter: PagedListAdapter<TvShowEntity, TvShowAdapter.TvShowViewHold
                             }
                         })
 
-                itemView.setOnClickListener {
-
-                }
-
                 itemView.setOnClickListener{onItemClickCallback.onItemClicked(tvShow.id.toString())}
             }
         }

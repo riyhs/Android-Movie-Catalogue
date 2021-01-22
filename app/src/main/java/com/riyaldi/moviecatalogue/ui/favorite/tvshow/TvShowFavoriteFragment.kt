@@ -1,5 +1,6 @@
 package com.riyaldi.moviecatalogue.ui.favorite.tvshow
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -9,11 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.riyaldi.moviecatalogue.databinding.FragmentMovieFavoriteBinding
+import com.riyaldi.moviecatalogue.ui.detail.DetailActivity
+import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel
+import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.TV_SHOW
 import com.riyaldi.moviecatalogue.ui.tvshows.TvShowAdapter
 import com.riyaldi.moviecatalogue.utils.MarginItemDecoration
 import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
 
-class TvShowFavoriteFragment : Fragment() {
+class TvShowFavoriteFragment : Fragment(), TvShowAdapter.OnItemClickCallback {
 
     private lateinit var fragmentTvShowBinding: FragmentMovieFavoriteBinding
 
@@ -35,6 +39,7 @@ class TvShowFavoriteFragment : Fragment() {
             viewModel.getFavTvShows().observe(viewLifecycleOwner, { favTvShow ->
                 if (favTvShow != null) {
                     adapter.submitList(favTvShow)
+                    adapter.setOnItemClickCallback(this)
                     adapter.notifyDataSetChanged()
                 }
             })
@@ -48,6 +53,14 @@ class TvShowFavoriteFragment : Fragment() {
                 this.adapter = adapter
             }
         }
+    }
+
+    override fun onItemClicked(id: String) {
+        val intent = Intent(context, DetailActivity::class.java)
+        intent.putExtra(DetailActivity.EXTRA_FILM, id)
+        intent.putExtra(DetailActivity.EXTRA_CATEGORY, TV_SHOW)
+
+        context?.startActivity(intent)
     }
 
 }
