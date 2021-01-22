@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.riyaldi.moviecatalogue.databinding.FragmentMovieFavoriteBinding
 import com.riyaldi.moviecatalogue.ui.detail.DetailActivity
-import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel
 import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.MOVIE
 import com.riyaldi.moviecatalogue.ui.movies.MovieAdapter
 import com.riyaldi.moviecatalogue.utils.MarginItemDecoration
@@ -19,14 +18,15 @@ import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
 
 class MovieFavoriteFragment : Fragment(), MovieAdapter.OnItemClickCallback {
 
-    private lateinit var fragmentMovieFavoriteBinding: FragmentMovieFavoriteBinding
+    private var _fragmentMovieFavoriteBinding: FragmentMovieFavoriteBinding? = null
+    private val binding get() = _fragmentMovieFavoriteBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        fragmentMovieFavoriteBinding = FragmentMovieFavoriteBinding.inflate(layoutInflater, container, false)
-        return fragmentMovieFavoriteBinding.root
+    ): View? {
+        _fragmentMovieFavoriteBinding = FragmentMovieFavoriteBinding.inflate(layoutInflater, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,19 +40,23 @@ class MovieFavoriteFragment : Fragment(), MovieAdapter.OnItemClickCallback {
                 if (favMovies != null) {
                     adapter.submitList(favMovies)
                     adapter.setOnItemClickCallback(this)
-                    adapter.notifyDataSetChanged()
                 }
             })
 
             val marginVertical = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, resources.displayMetrics)
 
-            with(fragmentMovieFavoriteBinding.rvFavMovies) {
-                addItemDecoration(MarginItemDecoration(marginVertical.toInt()))
-                layoutManager = LinearLayoutManager(context)
-                setHasFixedSize(true)
-                this.adapter = adapter
+            with(binding?.rvFavMovies) {
+                this?.addItemDecoration(MarginItemDecoration(marginVertical.toInt()))
+                this?.layoutManager = LinearLayoutManager(context)
+                this?.setHasFixedSize(true)
+                this?.adapter = adapter
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _fragmentMovieFavoriteBinding = null
     }
 
     override fun onItemClicked(id: String) {
