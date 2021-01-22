@@ -43,7 +43,7 @@ class TvShowFragment : Fragment(), TvShowAdapter.OnItemClickCallback {
                         Status.LOADING -> showProgressBar(true)
                         Status.SUCCESS -> {
                             showProgressBar(false)
-                            tvShowAdapter.setTvShows(tvShows.data)
+                            tvShowAdapter.submitList(tvShows.data)
                             tvShowAdapter.setOnItemClickCallback(this)
                             tvShowAdapter.notifyDataSetChanged()
                         }

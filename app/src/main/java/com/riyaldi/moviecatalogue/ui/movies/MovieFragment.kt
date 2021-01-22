@@ -43,7 +43,7 @@ class MovieFragment : Fragment(), MovieAdapter.OnItemClickCallback {
                         Status.LOADING -> showProgressBar(true)
                         Status.SUCCESS -> {
                             showProgressBar(false)
-                            movieAdapter.setMovies(movies.data)
+                            movieAdapter.submitList(movies.data)
                             movieAdapter.setOnItemClickCallback(this)
                             movieAdapter.notifyDataSetChanged()
                         }
