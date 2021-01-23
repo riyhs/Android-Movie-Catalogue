@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.riyaldi.moviecatalogue.R
-import com.riyaldi.moviecatalogue.databinding.FragmentMovieFavoriteBinding
+import com.riyaldi.moviecatalogue.databinding.FragmentTvShowFavoriteBinding
 import com.riyaldi.moviecatalogue.ui.detail.DetailActivity
 import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.TV_SHOW
 import com.riyaldi.moviecatalogue.utils.MarginItemDecoration
@@ -21,7 +21,7 @@ import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
 
 class TvShowFavoriteFragment : Fragment(), FavoriteTvShowAdapter.OnItemClickCallback {
 
-    private var _fragmentTvShowBinding: FragmentMovieFavoriteBinding? = null
+    private var _fragmentTvShowBinding: FragmentTvShowFavoriteBinding? = null
     private val binding get() = _fragmentTvShowBinding
 
     private lateinit var viewModel : FavoriteTvShowViewModel
@@ -31,14 +31,14 @@ class TvShowFavoriteFragment : Fragment(), FavoriteTvShowAdapter.OnItemClickCall
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _fragmentTvShowBinding = FragmentMovieFavoriteBinding.inflate(layoutInflater, container, false)
+        _fragmentTvShowBinding = FragmentTvShowFavoriteBinding.inflate(layoutInflater, container, false)
         return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        itemTouchHelper.attachToRecyclerView(binding?.rvFavMovies)
+        itemTouchHelper.attachToRecyclerView(binding?.rvFavTvShow)
 
         if (activity != null) {
             val factory = ViewModelFactory.getInstance(requireContext())
@@ -55,7 +55,7 @@ class TvShowFavoriteFragment : Fragment(), FavoriteTvShowAdapter.OnItemClickCall
 
             val marginVertical = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, resources.displayMetrics)
 
-            with(binding?.rvFavMovies) {
+            with(binding?.rvFavTvShow) {
                 this?.addItemDecoration(MarginItemDecoration(marginVertical.toInt()))
                 this?.layoutManager = LinearLayoutManager(context)
                 this?.setHasFixedSize(true)
