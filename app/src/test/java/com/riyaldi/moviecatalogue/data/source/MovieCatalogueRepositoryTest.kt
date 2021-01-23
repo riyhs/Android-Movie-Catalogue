@@ -2,6 +2,7 @@ package com.riyaldi.moviecatalogue.data.source
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.DataSource
 import com.nhaarman.mockitokotlin2.verify
 import com.riyaldi.moviecatalogue.data.source.local.LocalDataSource
 import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
@@ -10,6 +11,8 @@ import com.riyaldi.moviecatalogue.data.source.remote.RemoteDataSource
 import com.riyaldi.moviecatalogue.utils.AppExecutors
 import com.riyaldi.moviecatalogue.utils.DataDummy
 import com.riyaldi.moviecatalogue.utils.LiveDataTestUtil
+import com.riyaldi.moviecatalogue.utils.PagedListUtil
+import com.riyaldi.moviecatalogue.vo.Resource
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Rule
@@ -37,12 +40,12 @@ class MovieCatalogueRepositoryTest {
 
     @Test
     fun getMovies() {
-        val dummyMovies = MutableLiveData<List<MovieEntity>>()
-        dummyMovies.value = DataDummy.getMovies()
-        `when`(local.getAllMovies()).thenReturn(dummyMovies)
+        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, MovieEntity>
+        `when`(local.getAllMovies("BEST")).thenReturn(dataSourceFactory)
+        movieCatalogueRepository.getMovies("BEST")
 
-        val movieEntities = LiveDataTestUtil.getValue(movieCatalogueRepository.getMovies())
-        verify(local).getAllMovies()
+        val movieEntities = Resource.success(PagedListUtil.mockPagedList(DataDummy.getMovies()))
+        verify(local).getAllMovies("BEST")
         assertNotNull(movieEntities)
         assertEquals(moviesResponse.size, movieEntities.data?.size)
     }
@@ -61,12 +64,12 @@ class MovieCatalogueRepositoryTest {
 
     @Test
     fun getTvShows() {
-        val dummyTvShows = MutableLiveData<List<TvShowEntity>>()
-        dummyTvShows.value = DataDummy.getTvShows()
-        `when`(local.getAllTvShows()).thenReturn(dummyTvShows)
+        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, TvShowEntity>
+        `when`(local.getAllTvShows("BEST")).thenReturn(dataSourceFactory)
+        movieCatalogueRepository.getTvShows("BEST")
 
-        val tvShowEntities = LiveDataTestUtil.getValue(movieCatalogueRepository.getTvShows())
-        verify(local).getAllTvShows()
+        val tvShowEntities = Resource.success(PagedListUtil.mockPagedList(DataDummy.getTvShows()))
+        verify(local).getAllTvShows("BEST")
         assertNotNull(tvShowEntities)
         assertEquals(tvShowResponse.size, tvShowEntities.data?.size)
     }
