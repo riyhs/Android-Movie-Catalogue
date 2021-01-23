@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
 import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
-import com.riyaldi.moviecatalogue.data.source.remote.response.movie.Movie
 import com.riyaldi.moviecatalogue.vo.Resource
 
 interface MovieCatalogueDataSource {

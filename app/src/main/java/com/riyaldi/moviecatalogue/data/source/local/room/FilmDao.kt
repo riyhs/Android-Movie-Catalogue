@@ -9,7 +9,6 @@ import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
 
 @Dao
 interface FilmDao {
-//    @Query("SELECT * FROM movie_entities")
     @RawQuery(observedEntities = [MovieEntity::class])
     fun getMovies(query: SimpleSQLiteQuery): DataSource.Factory<Int, MovieEntity>
 
@@ -19,7 +18,6 @@ interface FilmDao {
     @Query("SELECT * FROM movie_entities WHERE isFav = 1")
     fun getFavMovies(): DataSource.Factory<Int, MovieEntity>
 
-//    @Query("SELECT * FROM tv_show_entities")
     @RawQuery(observedEntities = [TvShowEntity::class])
     fun getTvShows(query: SimpleSQLiteQuery): DataSource.Factory<Int, TvShowEntity>
 

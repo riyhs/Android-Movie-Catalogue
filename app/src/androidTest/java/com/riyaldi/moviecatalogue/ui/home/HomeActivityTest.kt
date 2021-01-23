@@ -36,12 +36,21 @@ class HomeActivityTest {
     @Test
     fun loadMovies() {
         onView(withId(R.id.rv_movies)).check(matches(isDisplayed()))
-        onView(withId(R.id.rv_movies)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(dummyMovie.size))
+        onView(withId(R.id.rv_movies)).perform(
+            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                dummyMovie.size
+            )
+        )
     }
 
     @Test
     fun loadDetailMovie() {
-        onView(withId(R.id.rv_movies)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        onView(withId(R.id.rv_movies)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
         onView(withId(R.id.iv_detail)).check(matches(isDisplayed()))
         onView(withId(R.id.coordinator_layout)).perform(swipeUp())
         onView(withId(R.id.iv_backdrop)).check(matches(isDisplayed()))
@@ -54,13 +63,22 @@ class HomeActivityTest {
     fun loadTvShows() {
         onView(withId(R.id.tvShowFragment)).perform(click())
         onView(withId(R.id.rv_tv_shows)).check(matches(isDisplayed()))
-        onView(withId(R.id.rv_tv_shows)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(dummyTvShow.size))
+        onView(withId(R.id.rv_tv_shows)).perform(
+            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                dummyTvShow.size
+            )
+        )
     }
 
     @Test
     fun loadDetailTvShow() {
         onView(withId(R.id.tvShowFragment)).perform(click())
-        onView(withId(R.id.rv_tv_shows)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        onView(withId(R.id.rv_tv_shows)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
         onView(withId(R.id.iv_detail)).check(matches(isDisplayed()))
         onView(withId(R.id.coordinator_layout)).perform(swipeUp())
         onView(withId(R.id.iv_backdrop)).check(matches(isDisplayed()))
@@ -73,17 +91,31 @@ class HomeActivityTest {
     fun loadFavMovies() {
         onView(withId(R.id.favoriteFragment)).perform(click())
         onView(withId(R.id.rv_fav_movies)).check(matches(isDisplayed()))
-        onView(withId(R.id.rv_fav_movies)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(dummyMovie.size))
+        onView(withId(R.id.rv_fav_movies)).perform(
+            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                dummyMovie.size
+            )
+        )
     }
 
     @Test
     fun loadDetailFavMovie() {
-        onView(withId(R.id.rv_movies)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        onView(withId(R.id.rv_movies)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
         onView(withId(R.id.fab_add_to_favorite)).perform(click())
         onView(isRoot()).perform(ViewActions.pressBack())
 
         onView(withId(R.id.favoriteFragment)).perform(click())
-        onView(withId(R.id.rv_fav_movies)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        onView(withId(R.id.rv_fav_movies)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
         onView(withId(R.id.iv_detail)).check(matches(isDisplayed()))
         onView(withId(R.id.fab_add_to_favorite)).perform(click())
         onView(withId(R.id.coordinator_layout)).perform(swipeUp())
@@ -98,19 +130,33 @@ class HomeActivityTest {
         onView(withId(R.id.favoriteFragment)).perform(click())
         onView(withText("TV SHOW")).perform(click())
         onView(withId(R.id.rv_fav_tv_show)).check(matches(isDisplayed()))
-        onView(withId(R.id.rv_fav_tv_show)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(dummyTvShow.size))
+        onView(withId(R.id.rv_fav_tv_show)).perform(
+            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                dummyTvShow.size
+            )
+        )
     }
 
     @Test
     fun loadDetailFavTvShow() {
         onView(withId(R.id.tvShowFragment)).perform(click())
-        onView(withId(R.id.rv_tv_shows)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        onView(withId(R.id.rv_tv_shows)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
         onView(withId(R.id.fab_add_to_favorite)).perform(click())
         onView(isRoot()).perform(ViewActions.pressBack())
 
         onView(withId(R.id.favoriteFragment)).perform(click())
         onView(withText("TV SHOW")).perform(click())
-        onView(withId(R.id.rv_fav_tv_show)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        onView(withId(R.id.rv_fav_tv_show)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
         onView(withId(R.id.iv_detail)).check(matches(isDisplayed()))
         onView(withId(R.id.fab_add_to_favorite)).perform(click())
         onView(withId(R.id.coordinator_layout)).perform(swipeUp())

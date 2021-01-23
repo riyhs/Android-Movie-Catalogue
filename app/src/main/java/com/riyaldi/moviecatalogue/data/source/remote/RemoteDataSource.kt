@@ -106,20 +106,4 @@ class RemoteDataSource {
 
         return resultDetailTvShow
     }
-
-    interface LoadMoviesCallback {
-        fun onMoviesLoaded(movies : List<Movie>?)
-    }
-
-    interface LoadDetailMovieCallback {
-        fun onDetailMovieLoaded(movieDetail : MovieDetailResponse?)
-    }
-
-    interface LoadTvShowsCallback {
-        fun onTvShowsLoaded(tvShows : List<TvShow>?)
-    }
-
-    interface LoadDetailTvShowCallback {
-        fun onDetailTvShowLoaded(tvShowDetail: TvShowDetailResponse?)
-    }
 }
