@@ -24,6 +24,9 @@ class HomeActivityTest {
     private val dummyDetailMovie = DataDummy.getDetailMovie()
     private val dummyDetailTvShow = DataDummy.getDetailTvShow()
 
+    private lateinit var userDao: Dao
+    private lateinit var db: TestDatabase
+
     @Before
     fun setup() {
         ActivityScenario.launch(HomeActivity::class.java)
