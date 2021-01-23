@@ -11,13 +11,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.riyaldi.moviecatalogue.databinding.FragmentMovieFavoriteBinding
 import com.riyaldi.moviecatalogue.ui.detail.DetailActivity
-import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel
 import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.TV_SHOW
 import com.riyaldi.moviecatalogue.ui.tvshows.TvShowAdapter
 import com.riyaldi.moviecatalogue.utils.MarginItemDecoration
 import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
 
-class TvShowFavoriteFragment : Fragment(), TvShowAdapter.OnItemClickCallback {
+class TvShowFavoriteFragment : Fragment(), TvShowAdapter.OnItemClickCallback, FavoriteTvShowAdapter.OnItemClickCallback {
 
     private lateinit var fragmentTvShowBinding: FragmentMovieFavoriteBinding
 
@@ -35,7 +34,7 @@ class TvShowFavoriteFragment : Fragment(), TvShowAdapter.OnItemClickCallback {
             val factory = ViewModelFactory.getInstance(requireContext())
             val viewModel = ViewModelProvider(this, factory)[FavoriteTvShowViewModel::class.java]
 
-            val adapter = TvShowAdapter()
+            val adapter = FavoriteTvShowAdapter()
             viewModel.getFavTvShows().observe(viewLifecycleOwner, { favTvShow ->
                 if (favTvShow != null) {
                     adapter.submitList(favTvShow)

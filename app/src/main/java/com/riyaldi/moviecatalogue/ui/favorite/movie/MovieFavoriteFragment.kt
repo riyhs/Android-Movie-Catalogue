@@ -16,7 +16,7 @@ import com.riyaldi.moviecatalogue.ui.movies.MovieAdapter
 import com.riyaldi.moviecatalogue.utils.MarginItemDecoration
 import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
 
-class MovieFavoriteFragment : Fragment(), MovieAdapter.OnItemClickCallback {
+class MovieFavoriteFragment : Fragment(), MovieAdapter.OnItemClickCallback, FavoriteMovieAdapter.OnItemClickCallback {
 
     private var _fragmentMovieFavoriteBinding: FragmentMovieFavoriteBinding? = null
     private val binding get() = _fragmentMovieFavoriteBinding
@@ -35,7 +35,7 @@ class MovieFavoriteFragment : Fragment(), MovieAdapter.OnItemClickCallback {
             val factory = ViewModelFactory.getInstance(requireActivity())
             val viewModel = ViewModelProvider(this, factory)[FavoriteMovieViewModel::class.java]
 
-            val adapter = MovieAdapter()
+            val adapter = FavoriteMovieAdapter()
             viewModel.getFavMovies().observe(viewLifecycleOwner, { favMovies ->
                 if (favMovies != null) {
                     adapter.submitList(favMovies)
