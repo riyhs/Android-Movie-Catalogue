@@ -16,6 +16,7 @@ import com.riyaldi.moviecatalogue.ui.detail.DetailActivity
 import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.TV_SHOW
 import com.riyaldi.moviecatalogue.ui.home.HomeActivity
 import com.riyaldi.moviecatalogue.utils.MarginItemDecoration
+import com.riyaldi.moviecatalogue.utils.SortUtils.VOTE_BEST
 import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
 import com.riyaldi.moviecatalogue.vo.Status
 
@@ -40,7 +41,7 @@ class TvShowFragment : Fragment(), TvShowAdapter.OnItemClickCallback {
             val viewModel = ViewModelProvider(this, factory)[TvShowViewModel::class.java]
 
             val tvShowAdapter = TvShowAdapter()
-            viewModel.getTvShows().observe(viewLifecycleOwner, { tvShows ->
+            viewModel.getTvShows(VOTE_BEST).observe(viewLifecycleOwner, { tvShows ->
                 if (tvShows != null) {
                     when (tvShows.status) {
                         Status.LOADING -> showProgressBar(true)
@@ -79,7 +80,7 @@ class TvShowFragment : Fragment(), TvShowAdapter.OnItemClickCallback {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()
-        activity?.menuInflater?.inflate(R.menu.bookmark_menu, menu)
+        activity?.menuInflater?.inflate(R.menu.sort_menu, menu)
         return super.onCreateOptionsMenu(menu, inflater)
     }
 

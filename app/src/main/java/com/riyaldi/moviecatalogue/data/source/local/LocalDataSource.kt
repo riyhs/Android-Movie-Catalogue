@@ -5,6 +5,9 @@ import androidx.paging.DataSource
 import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
 import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
 import com.riyaldi.moviecatalogue.data.source.local.room.FilmDao
+import com.riyaldi.moviecatalogue.utils.SortUtils
+import com.riyaldi.moviecatalogue.utils.SortUtils.MOVIE_ENTITIES
+import com.riyaldi.moviecatalogue.utils.SortUtils.TV_SHOW_ENTITIES
 
 class LocalDataSource private constructor(private val mFilmDao: FilmDao) {
     companion object {
@@ -14,13 +17,13 @@ class LocalDataSource private constructor(private val mFilmDao: FilmDao) {
             INSTANCE ?: LocalDataSource(filmDao)
     }
 
-    fun getAllMovies(): DataSource.Factory<Int, MovieEntity> = mFilmDao.getMovies()
+    fun getAllMovies(sort: String): DataSource.Factory<Int, MovieEntity> = mFilmDao.getMovies(SortUtils.getSortedQuery(sort, MOVIE_ENTITIES))
 
     fun getMovieById(id: Int): LiveData<MovieEntity> = mFilmDao.getMovieById(id)
 
     fun getFavMovies(): DataSource.Factory<Int, MovieEntity> = mFilmDao.getFavMovies()
 
-    fun getAllTvShows(): DataSource.Factory<Int, TvShowEntity> = mFilmDao.getTvShows()
+    fun getAllTvShows(sort: String): DataSource.Factory<Int, TvShowEntity> = mFilmDao.getTvShows(SortUtils.getSortedQuery(sort, TV_SHOW_ENTITIES))
 
     fun getTvShowById(id: Int): LiveData<TvShowEntity> = mFilmDao.getTvShowById(id)
 

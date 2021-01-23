@@ -8,7 +8,7 @@ import com.riyaldi.moviecatalogue.data.source.remote.response.movie.Movie
 import com.riyaldi.moviecatalogue.vo.Resource
 
 interface MovieCatalogueDataSource {
-    fun getMovies(): LiveData<Resource<PagedList<MovieEntity>>>
+    fun getMovies(sort: String): LiveData<Resource<PagedList<MovieEntity>>>
 
     fun getDetailMovie(movieId: Int): LiveData<Resource<MovieEntity>>
 
@@ -16,7 +16,7 @@ interface MovieCatalogueDataSource {
 
     fun setFavoriteMovie(movie: MovieEntity, state: Boolean)
 
-    fun getTvShows(): LiveData<Resource<PagedList<TvShowEntity>>>
+    fun getTvShows(sort: String): LiveData<Resource<PagedList<TvShowEntity>>>
 
     fun getDetailTvShow(tvShowId: Int): LiveData<Resource<TvShowEntity>>
 

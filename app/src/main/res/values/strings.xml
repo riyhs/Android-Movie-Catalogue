@@ -18,4 +18,7 @@
     <string name="add_to_favorite">Add To Favorite</string>
     <string name="ok">Ok</string>
     <string name="undo">Undo</string>
+    <string name="best_vote">Best Vote</string>
+    <string name="worst_vote">Worst Vote</string>
+    <string name="random">Random</string>
 </resources>
