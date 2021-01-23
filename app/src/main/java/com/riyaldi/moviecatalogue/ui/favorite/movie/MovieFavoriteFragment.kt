@@ -8,18 +8,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import com.riyaldi.moviecatalogue.R
 import com.riyaldi.moviecatalogue.databinding.FragmentMovieFavoriteBinding
 import com.riyaldi.moviecatalogue.ui.detail.DetailActivity
 import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.MOVIE
-import com.riyaldi.moviecatalogue.ui.movies.MovieAdapter
 import com.riyaldi.moviecatalogue.utils.MarginItemDecoration
 import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
 
-class MovieFavoriteFragment : Fragment(), MovieAdapter.OnItemClickCallback, FavoriteMovieAdapter.OnItemClickCallback {
+class MovieFavoriteFragment : Fragment(), FavoriteMovieAdapter.OnItemClickCallback {
 
     private var _fragmentMovieFavoriteBinding: FragmentMovieFavoriteBinding? = null
     private val binding get() = _fragmentMovieFavoriteBinding
+
+    private lateinit var viewModel : FavoriteMovieViewModel
+    private lateinit var adapter : FavoriteMovieAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,15 +37,19 @@ class MovieFavoriteFragment : Fragment(), MovieAdapter.OnItemClickCallback, Favo
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        itemTouchHelper.attachToRecyclerView(binding?.rvFavMovies)
+
         if (activity != null) {
             val factory = ViewModelFactory.getInstance(requireActivity())
-            val viewModel = ViewModelProvider(this, factory)[FavoriteMovieViewModel::class.java]
+            viewModel = ViewModelProvider(this, factory)[FavoriteMovieViewModel::class.java]
 
-            val adapter = FavoriteMovieAdapter()
+            adapter = FavoriteMovieAdapter()
+            adapter.setOnItemClickCallback(this)
+
             viewModel.getFavMovies().observe(viewLifecycleOwner, { favMovies ->
                 if (favMovies != null) {
                     adapter.submitList(favMovies)
-                    adapter.setOnItemClickCallback(this)
                 }
             })
 
@@ -53,6 +63,27 @@ class MovieFavoriteFragment : Fragment(), MovieAdapter.OnItemClickCallback, Favo
             }
         }
     }
+
+    private val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.Callback() {
+        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int =
+                makeMovementFlags(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
+
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean = true
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            if (view != null) {
+                val swipedPosition = viewHolder.adapterPosition
+                val movieEntity = adapter.getSwipedData(swipedPosition)
+                movieEntity?.let { viewModel.setFavMovie(it) }
+
+                val snackBar = Snackbar.make(view as View, R.string.undo, Snackbar.LENGTH_LONG)
+                snackBar.setAction(R.string.ok) { _ ->
+                    movieEntity?.let { viewModel.setFavMovie(it) }
+                }
+                snackBar.show()
+            }
+        }
+    })
 
     override fun onDestroy() {
         super.onDestroy()
