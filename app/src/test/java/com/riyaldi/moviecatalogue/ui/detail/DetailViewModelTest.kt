@@ -5,12 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.verify
 import com.riyaldi.moviecatalogue.data.source.MovieCatalogueRepository
-import com.riyaldi.moviecatalogue.data.source.model.DetailModel
+import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
+import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
 import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.MOVIE
 import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.TV_SHOW
 import com.riyaldi.moviecatalogue.utils.DataDummy
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import com.riyaldi.moviecatalogue.vo.Resource
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -25,10 +25,10 @@ class DetailViewModelTest {
     private lateinit var viewModel: DetailViewModel
 
     private val dummyMovie = DataDummy.getDetailMovie()
-    private val dummyMovieId = dummyMovie.id.toString()
+    private val dummyMovieId = dummyMovie.id
 
     private val dummyTvShow = DataDummy.getDetailTvShow()
-    private val dummyTvShowId = dummyTvShow.id.toString()
+    private val dummyTvShowId = dummyTvShow.id
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -37,7 +37,10 @@ class DetailViewModelTest {
     private lateinit var movieCatalogueRepository: MovieCatalogueRepository
 
     @Mock
-    private lateinit var movieObserver: Observer<DetailModel>
+    private lateinit var movieObserver: Observer<Resource<MovieEntity>>
+
+    @Mock
+    private lateinit var tvShowObserver: Observer<Resource<TvShowEntity>>
 
     // Get Data Movie Testing
     @Before
@@ -47,27 +50,15 @@ class DetailViewModelTest {
 
     @Test
     fun getMovieDetail() {
-        val movie = MutableLiveData<DetailModel>()
-        movie.value = dummyMovie
+        val dummyDetailMovie = Resource.success(DataDummy.getDetailMovie())
+        val movie = MutableLiveData<Resource<MovieEntity>>()
+        movie.value = dummyDetailMovie
 
         `when`(movieCatalogueRepository.getDetailMovie(dummyMovieId)).thenReturn(movie)
-        viewModel.setFilm(dummyMovieId, MOVIE)
-        val detailEntity = viewModel.getDataDetail().value as DetailModel
-        verify(movieCatalogueRepository).getDetailMovie(dummyMovieId)
 
-        assertNotNull(detailEntity)
-        assertEquals(dummyMovie.backdropPath, detailEntity.backdropPath)
-        assertEquals(dummyMovie.genres, detailEntity.genres)
-        assertEquals(dummyMovie.id, detailEntity.id)
-        assertEquals(dummyMovie.overview, detailEntity.overview)
-        assertEquals(dummyMovie.posterPath, detailEntity.posterPath)
-        assertEquals(dummyMovie.releaseDate, detailEntity.releaseDate)
-        assertEquals(dummyMovie.runtime, detailEntity.runtime)
-        assertEquals(dummyMovie.title, detailEntity.title)
-        assertEquals(dummyMovie.voteAverage.toInt(), detailEntity.voteAverage.toInt())
-
-        viewModel.getDataDetail().observeForever(movieObserver)
-        verify(movieObserver).onChanged(dummyMovie)
+        viewModel.setFilm(dummyMovieId.toString(), MOVIE)
+        viewModel.getDetailMovie().observeForever(movieObserver)
+        verify(movieObserver).onChanged(dummyDetailMovie)
     }
 
     // Get Data TV Show Testing
@@ -78,26 +69,14 @@ class DetailViewModelTest {
 
     @Test
     fun getTvShowDetail() {
-        val tvShow = MutableLiveData<DetailModel>()
-        tvShow.value = dummyTvShow
+        val dummyDetailTvShow = Resource.success(DataDummy.getDetailTvShow())
+        val tvShow = MutableLiveData<Resource<TvShowEntity>>()
+        tvShow.value = dummyDetailTvShow
 
         `when`(movieCatalogueRepository.getDetailTvShow(dummyTvShowId)).thenReturn(tvShow)
-        viewModel.setFilm(dummyTvShowId, TV_SHOW)
-        val detailEntity = viewModel.getDataDetail().value as DetailModel
-        verify(movieCatalogueRepository).getDetailTvShow(dummyTvShowId)
 
-        assertNotNull(detailEntity)
-        assertEquals(dummyTvShow.backdropPath, detailEntity.backdropPath)
-        assertEquals(dummyTvShow.genres, detailEntity.genres)
-        assertEquals(dummyTvShow.id, detailEntity.id)
-        assertEquals(dummyTvShow.overview, detailEntity.overview)
-        assertEquals(dummyTvShow.posterPath, detailEntity.posterPath)
-        assertEquals(dummyTvShow.releaseDate, detailEntity.releaseDate)
-        assertEquals(dummyTvShow.runtime, detailEntity.runtime)
-        assertEquals(dummyTvShow.title, detailEntity.title)
-        assertEquals(dummyTvShow.voteAverage.toInt(), detailEntity.voteAverage.toInt())
-
-        viewModel.getDataDetail().observeForever(movieObserver)
-        verify(movieObserver).onChanged(dummyTvShow)
+        viewModel.setFilm(dummyTvShowId.toString(), TV_SHOW)
+        viewModel.getDetailTvShow().observeForever(tvShowObserver)
+        verify(tvShowObserver).onChanged(dummyDetailTvShow)
     }
 }

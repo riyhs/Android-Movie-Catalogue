@@ -1,17 +1,23 @@
 package com.riyaldi.moviecatalogue.data.source
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doAnswer
-import com.nhaarman.mockitokotlin2.eq
+import androidx.lifecycle.MutableLiveData
+import androidx.paging.DataSource
 import com.nhaarman.mockitokotlin2.verify
+import com.riyaldi.moviecatalogue.data.source.local.LocalDataSource
+import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
+import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
 import com.riyaldi.moviecatalogue.data.source.remote.RemoteDataSource
+import com.riyaldi.moviecatalogue.utils.AppExecutors
 import com.riyaldi.moviecatalogue.utils.DataDummy
 import com.riyaldi.moviecatalogue.utils.LiveDataTestUtil
+import com.riyaldi.moviecatalogue.utils.PagedListUtil
+import com.riyaldi.moviecatalogue.vo.Resource
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 
 class MovieCatalogueRepositoryTest {
@@ -20,65 +26,63 @@ class MovieCatalogueRepositoryTest {
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val remote = mock(RemoteDataSource::class.java)
-    private val movieCatalogueRepository = FakeMovieCatalogueRepository(remote)
+    private val local = mock(LocalDataSource::class.java)
+    private val appExecutors = mock(AppExecutors::class.java)
+    private val movieCatalogueRepository = FakeMovieCatalogueRepository(remote, local, appExecutors)
 
     private val moviesResponse = DataDummy.getRemoteMovies()
-    private val movieId = moviesResponse[0].id.toString()
+    private val movieId = moviesResponse[0].id
     private val movieDetail = DataDummy.getRemoteDetailMovie()
 
     private val tvShowResponse = DataDummy.getRemoteTvShows()
-    private val tvShowId = tvShowResponse[0].id.toString()
+    private val tvShowId = tvShowResponse[0].id
     private val tvShowDetail = DataDummy.getRemoteDetailTvShow()
 
     @Test
     fun getMovies() {
-        doAnswer { invocation ->
-            (invocation.arguments[0] as RemoteDataSource.LoadMoviesCallback).onMoviesLoaded(moviesResponse)
-            null
-        }.`when`(remote).getMovies(any())
+        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, MovieEntity>
+        `when`(local.getAllMovies("BEST")).thenReturn(dataSourceFactory)
+        movieCatalogueRepository.getMovies("BEST")
 
-        val movieEntities = LiveDataTestUtil.getValue(movieCatalogueRepository.getMovies())
-        verify(remote).getMovies(any())
+        val movieEntities = Resource.success(PagedListUtil.mockPagedList(DataDummy.getMovies()))
+        verify(local).getAllMovies("BEST")
         assertNotNull(movieEntities)
-        assertEquals(moviesResponse.size, movieEntities.size)
+        assertEquals(moviesResponse.size, movieEntities.data?.size)
     }
 
     @Test
     fun getDetailMovie() {
-        doAnswer { invocation ->
-            (invocation.arguments[0] as RemoteDataSource.LoadDetailMovieCallback).onDetailMovieLoaded(movieDetail)
-            null
-        }.`when`(remote).getDetailMovie(any(), eq(movieId))
+        val dummyDetail = MutableLiveData<MovieEntity>()
+        dummyDetail.value = DataDummy.getDetailMovie()
+        `when`(local.getMovieById(movieId)).thenReturn(dummyDetail)
 
         val movieDetailEntity = LiveDataTestUtil.getValue(movieCatalogueRepository.getDetailMovie(movieId))
-        verify(remote).getDetailMovie(any(), eq(movieId))
+        verify(local).getMovieById(movieId)
         assertNotNull(movieDetailEntity)
-        assertEquals(movieDetail.id, movieDetailEntity.id)
+        assertEquals(movieDetail.id, movieDetailEntity.data?.id)
     }
 
     @Test
     fun getTvShows() {
-        doAnswer { invocation ->
-            (invocation.arguments[0] as RemoteDataSource.LoadTvShowsCallback).onTvShowsLoaded(tvShowResponse)
-            null
-        }.`when`(remote).getTvShows(any())
+        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, TvShowEntity>
+        `when`(local.getAllTvShows("BEST")).thenReturn(dataSourceFactory)
+        movieCatalogueRepository.getTvShows("BEST")
 
-        val tvShowEntities = LiveDataTestUtil.getValue(movieCatalogueRepository.getTvShows())
-        verify(remote).getTvShows(any())
+        val tvShowEntities = Resource.success(PagedListUtil.mockPagedList(DataDummy.getTvShows()))
+        verify(local).getAllTvShows("BEST")
         assertNotNull(tvShowEntities)
-        assertEquals(tvShowResponse.size, tvShowEntities.size)
+        assertEquals(tvShowResponse.size, tvShowEntities.data?.size)
     }
 
     @Test
     fun getDetailTvShow() {
-        doAnswer { invocation ->
-            (invocation.arguments[0] as RemoteDataSource.LoadDetailTvShowCallback).onDetailTvShowLoaded(tvShowDetail)
-            null
-        }.`when`(remote).getDetailTvShow(any(), eq(tvShowId))
+        val dummyDetail = MutableLiveData<TvShowEntity>()
+        dummyDetail.value = DataDummy.getDetailTvShow()
+        `when`(local.getTvShowById(tvShowId)).thenReturn(dummyDetail)
 
         val tvShowDetailEntity = LiveDataTestUtil.getValue(movieCatalogueRepository.getDetailTvShow(tvShowId))
-        verify(remote).getDetailTvShow(any(), eq(tvShowId))
+        verify(local).getTvShowById(tvShowId)
         assertNotNull(tvShowDetailEntity)
-        assertEquals(tvShowDetail.id, tvShowDetailEntity.id)
+        assertEquals(tvShowDetail.id, tvShowDetailEntity.data?.id)
     }
 }

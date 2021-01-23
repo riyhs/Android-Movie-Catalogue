@@ -3,10 +3,11 @@ package com.riyaldi.moviecatalogue.ui.tvshows
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.paging.PagedList
 import com.nhaarman.mockitokotlin2.verify
 import com.riyaldi.moviecatalogue.data.source.MovieCatalogueRepository
-import com.riyaldi.moviecatalogue.data.source.model.TvShowModel
-import com.riyaldi.moviecatalogue.utils.DataDummy
+import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
+import com.riyaldi.moviecatalogue.vo.Resource
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -29,7 +30,10 @@ class TvShowViewModelTest {
     private lateinit var movieCatalogueRepository: MovieCatalogueRepository
 
     @Mock
-    private lateinit var observer: Observer<List<TvShowModel>>
+    private lateinit var observer: Observer<Resource<PagedList<TvShowEntity>>>
+
+    @Mock
+    private lateinit var pagedList: PagedList<TvShowEntity>
 
     @Before
     fun setUp() {
@@ -38,17 +42,18 @@ class TvShowViewModelTest {
 
     @Test
     fun getTvShows() {
-        val dummyTvShow = DataDummy.getTvShows()
-        val tvShows = MutableLiveData<List<TvShowModel>>()
+        val dummyTvShow = Resource.success(pagedList)
+        `when`(dummyTvShow.data?.size).thenReturn(3)
+        val tvShows = MutableLiveData<Resource<PagedList<TvShowEntity>>>()
         tvShows.value = dummyTvShow
 
-        `when`(movieCatalogueRepository.getTvShows()).thenReturn(tvShows)
-        val tvShow = viewModel.getTvShows().value
-        verify(movieCatalogueRepository).getTvShows()
+        `when`(movieCatalogueRepository.getTvShows("BEST")).thenReturn(tvShows)
+        val tvShow = viewModel.getTvShows("BEST").value?.data
+        verify(movieCatalogueRepository).getTvShows("BEST")
         assertNotNull(tvShow)
         assertEquals(3, tvShow?.size)
 
-        viewModel.getTvShows().observeForever(observer)
+        viewModel.getTvShows("BEST").observeForever(observer)
         verify(observer).onChanged(dummyTvShow)
     }
 }

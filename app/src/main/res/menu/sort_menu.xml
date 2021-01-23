@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_bookmark"
+            android:checked="true"
+            android:icon="@drawable/ic_arrow_up"
+            android:title="@string/best_vote" />
+        <item
+            android:id="@+id/action_bookmark3"
+            android:checked="false"
+            android:icon="@drawable/ic_arrow_down"
+            android:title="@string/worst_vote" />
+        <item
+            android:id="@+id/action_bookmark4"
+            android:checked="false"
+            android:icon="@drawable/ic_list"
+            android:title="@string/random" />
+    </group>
+</menu>

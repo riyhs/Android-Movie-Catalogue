@@ -3,7 +3,9 @@ package com.riyaldi.moviecatalogue.ui.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.riyaldi.moviecatalogue.data.source.MovieCatalogueRepository
-import com.riyaldi.moviecatalogue.data.source.model.DetailModel
+import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
+import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
+import com.riyaldi.moviecatalogue.vo.Resource
 
 class DetailViewModel(private val movieCatalogueRepository: MovieCatalogueRepository): ViewModel() {
     companion object {
@@ -11,20 +13,38 @@ class DetailViewModel(private val movieCatalogueRepository: MovieCatalogueReposi
         const val TV_SHOW = "tvShow"
     }
 
-    private lateinit var detailData: LiveData<DetailModel>
+    private lateinit var detailTvShow: LiveData<Resource<TvShowEntity>>
+    private lateinit var detailMovie: LiveData<Resource<MovieEntity>>
 
     fun setFilm(id: String, category: String) {
         when (category) {
             TV_SHOW -> {
-                detailData = movieCatalogueRepository.getDetailTvShow(id)
+                detailTvShow = movieCatalogueRepository.getDetailTvShow(id.toInt())
             }
 
             MOVIE -> {
-                detailData = movieCatalogueRepository.getDetailMovie(id)
+                detailMovie = movieCatalogueRepository.getDetailMovie(id.toInt())
             }
         }
     }
 
-    fun getDataDetail() = detailData
+    fun setFavoriteMovie() {
+        val resource = detailMovie.value
+        if (resource?.data != null) {
+            val newState = !resource.data.isFav
+            movieCatalogueRepository.setFavoriteMovie(resource.data, newState)
+        }
+    }
+
+    fun setFavoriteTvShow() {
+        val resource = detailTvShow.value
+        if (resource?.data != null) {
+            val newState = !resource.data.isFav
+            movieCatalogueRepository.setFavoriteTvShow(resource.data, newState)
+        }
+    }
+
+    fun getDetailTvShow() = detailTvShow
+    fun getDetailMovie() = detailMovie
 
 }

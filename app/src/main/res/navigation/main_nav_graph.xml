@@ -11,10 +11,18 @@
         android:label="MovieFragment" >
         <action
             android:id="@+id/action_movieFragment_to_tvShowFragment"
-            app:destination="@id/tvShowFragment" />
+            app:destination="@id/tvShowFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_movieFragment_to_favoriteFragment"
-            app:destination="@id/favoriteFragment" />
+            app:destination="@id/favoriteFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/tvShowFragment"
