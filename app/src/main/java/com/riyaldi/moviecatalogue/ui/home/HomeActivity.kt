@@ -20,6 +20,7 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding?.root)
 
         setupBottomNav()
+
     }
 
     private fun setupBottomNav() {
@@ -27,8 +28,8 @@ class HomeActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_main) as NavHostFragment
         if (bottomNavigationView != null) {
             NavigationUI.setupWithNavController(
-                bottomNavigationView,
-                navHostFragment.navController
+                    bottomNavigationView,
+                    navHostFragment.navController
             )
         }
     }
@@ -36,6 +37,10 @@ class HomeActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         _activityMainBinding = null
+    }
+
+    fun setActionBarTitle(title: String) {
+        supportActionBar?.title = title
     }
 
 }
