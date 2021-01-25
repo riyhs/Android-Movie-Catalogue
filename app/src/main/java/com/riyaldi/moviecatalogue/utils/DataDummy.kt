@@ -27,7 +27,7 @@ object DataDummy {
                         151,
                         "Wonder Woman 1984",
                         7.1,
-                        true
+                        false
                 ),
                 MovieEntity(
                         508442,
@@ -39,7 +39,7 @@ object DataDummy {
                         102,
                         "Soul",
                         8.3,
-                        true
+                        false
                 ),
                 MovieEntity(
                         517096,
@@ -68,7 +68,7 @@ object DataDummy {
                 151,
                 "Wonder Woman 1984",
                 7.1,
-                true
+                false
         )
     }
 

@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.riyaldi.moviecatalogue.data.source.local.LocalDataSource
 import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
 import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
@@ -63,6 +64,25 @@ class MovieCatalogueRepositoryTest {
     }
 
     @Test
+    fun getFavoriteMovie() {
+        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, MovieEntity>
+        `when`(local.getFavMovies()).thenReturn(dataSourceFactory)
+        movieCatalogueRepository.getFavoriteMovies()
+
+        val movieEntities = Resource.success(PagedListUtil.mockPagedList(DataDummy.getMovies()))
+        verify(local).getFavMovies()
+        assertNotNull(movieEntities)
+        assertEquals(moviesResponse.size, movieEntities.data?.size)
+    }
+
+    @Test
+    fun setFavoriteMovie() {
+        movieCatalogueRepository.setFavoriteMovie(DataDummy.getDetailMovie(), true)
+        verify(local).setFavoriteMovie(DataDummy.getDetailMovie(), true)
+        verifyNoMoreInteractions(local)
+    }
+
+    @Test
     fun getTvShows() {
         val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, TvShowEntity>
         `when`(local.getAllTvShows("BEST")).thenReturn(dataSourceFactory)
@@ -84,5 +104,24 @@ class MovieCatalogueRepositoryTest {
         verify(local).getTvShowById(tvShowId)
         assertNotNull(tvShowDetailEntity)
         assertEquals(tvShowDetail.id, tvShowDetailEntity.data?.id)
+    }
+
+    @Test
+    fun getFavoriteTvShow() {
+        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, TvShowEntity>
+        `when`(local.getFavTvShows()).thenReturn(dataSourceFactory)
+        movieCatalogueRepository.getFavoriteTvShows()
+
+        val tvShowEntities = Resource.success(PagedListUtil.mockPagedList(DataDummy.getTvShows()))
+        verify(local).getFavTvShows()
+        assertNotNull(tvShowEntities)
+        assertEquals(tvShowResponse.size, tvShowEntities.data?.size)
+    }
+
+    @Test
+    fun setFavoriteTvShow() {
+        movieCatalogueRepository.setFavoriteTvShow(DataDummy.getDetailTvShow(), true)
+        verify(local).setFavoriteTvShow(DataDummy.getDetailTvShow(), true)
+        verifyNoMoreInteractions(local)
     }
 }

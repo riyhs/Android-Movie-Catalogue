@@ -9,7 +9,7 @@ import com.riyaldi.moviecatalogue.utils.SortUtils
 import com.riyaldi.moviecatalogue.utils.SortUtils.MOVIE_ENTITIES
 import com.riyaldi.moviecatalogue.utils.SortUtils.TV_SHOW_ENTITIES
 
-class LocalDataSource private constructor(private val mFilmDao: FilmDao) {
+class LocalDataSource(private val mFilmDao: FilmDao) {
     companion object {
         private var INSTANCE: LocalDataSource? = null
 

@@ -110,9 +110,7 @@ class FakeMovieCatalogueRepository constructor(
     }
 
     override fun setFavoriteMovie(movie: MovieEntity, state: Boolean) {
-        appExecutors.diskIO().execute {
-            localDataSource.setFavoriteMovie(movie, state)
-        }
+        localDataSource.setFavoriteMovie(movie, state)
     }
 
     override fun getTvShows(sort: String): LiveData<Resource<PagedList<TvShowEntity>>> {
@@ -204,8 +202,6 @@ class FakeMovieCatalogueRepository constructor(
     }
 
     override fun setFavoriteTvShow(tvShow: TvShowEntity, state: Boolean) {
-        appExecutors.diskIO().execute {
-            localDataSource.setFavoriteTvShow(tvShow, state)
-        }
+        localDataSource.setFavoriteTvShow(tvShow, state)
     }
 }
