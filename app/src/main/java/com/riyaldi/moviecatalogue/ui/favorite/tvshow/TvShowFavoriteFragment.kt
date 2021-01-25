@@ -35,6 +35,15 @@ class TvShowFavoriteFragment : Fragment(), FavoriteTvShowAdapter.OnItemClickCall
         return binding?.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getFavTvShows().observe(viewLifecycleOwner, { favTvShow ->
+            if (favTvShow != null) {
+                adapter.submitList(favTvShow)
+            }
+        })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

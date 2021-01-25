@@ -35,6 +35,15 @@ class MovieFavoriteFragment : Fragment(), FavoriteMovieAdapter.OnItemClickCallba
         return binding?.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getFavMovies().observe(viewLifecycleOwner, { favMovies ->
+            if (favMovies != null) {
+                adapter.submitList(favMovies)
+            }
+        })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
