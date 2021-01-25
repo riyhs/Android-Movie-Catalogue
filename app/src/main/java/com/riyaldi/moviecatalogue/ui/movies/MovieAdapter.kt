@@ -18,7 +18,7 @@ import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
 import com.riyaldi.moviecatalogue.databinding.ItemMovieBinding
 import com.riyaldi.moviecatalogue.utils.NetworkInfo.IMAGE_URL
 
-class MovieAdapter: PagedListAdapter<MovieEntity, MovieAdapter.MovieViewHolder>(DIFF_CALLBACK) {
+class MovieAdapter : PagedListAdapter<MovieEntity, MovieAdapter.MovieViewHolder>(DIFF_CALLBACK) {
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MovieEntity>() {
@@ -67,7 +67,8 @@ class MovieAdapter: PagedListAdapter<MovieEntity, MovieAdapter.MovieViewHolder>(
 
                                 Palette.from(resource).generate { palette ->
                                     val defValue = itemView.resources.getColor(R.color.dark, itemView.context.theme)
-                                    cardItem.setCardBackgroundColor(palette?.getDarkMutedColor(defValue) ?: defValue)
+                                    cardItem.setCardBackgroundColor(palette?.getDarkMutedColor(defValue)
+                                            ?: defValue)
                                 }
                             }
 
@@ -75,7 +76,7 @@ class MovieAdapter: PagedListAdapter<MovieEntity, MovieAdapter.MovieViewHolder>(
                             }
                         })
 
-                itemView.setOnClickListener {onItemClickCallback.onItemClicked(movie.id.toString())}
+                itemView.setOnClickListener { onItemClickCallback.onItemClicked(movie.id.toString()) }
             }
         }
     }

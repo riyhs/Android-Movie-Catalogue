@@ -6,14 +6,8 @@ import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.riyaldi.moviecatalogue.data.source.FakeMovieCatalogueRepository
 import com.riyaldi.moviecatalogue.data.source.MovieCatalogueRepository
-import com.riyaldi.moviecatalogue.data.source.local.LocalDataSource
 import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
-import com.riyaldi.moviecatalogue.data.source.local.room.FilmDao
-import com.riyaldi.moviecatalogue.data.source.remote.RemoteDataSource
-import com.riyaldi.moviecatalogue.ui.movies.MovieViewModel
-import com.riyaldi.moviecatalogue.utils.AppExecutors
 import com.riyaldi.moviecatalogue.utils.DataDummy
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -23,7 +17,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)

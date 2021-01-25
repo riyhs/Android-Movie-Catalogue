@@ -19,7 +19,7 @@ class FakeMovieCatalogueRepository constructor(
         private val remoteDataSource: RemoteDataSource,
         private val localDataSource: LocalDataSource,
         private val appExecutors: AppExecutors
-) : MovieCatalogueDataSource{
+) : MovieCatalogueDataSource {
 
     override fun getMovies(sort: String): LiveData<Resource<PagedList<MovieEntity>>> {
         return object : NetworkBoundResource<PagedList<MovieEntity>, List<Movie>>(appExecutors) {

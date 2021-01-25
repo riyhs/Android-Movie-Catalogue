@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.riyaldi.moviecatalogue.data.source.MovieCatalogueRepository
 import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
 
-class FavoriteMovieViewModel(private val repository: MovieCatalogueRepository): ViewModel() {
+class FavoriteMovieViewModel(private val repository: MovieCatalogueRepository) : ViewModel() {
     fun getFavMovies() = repository.getFavoriteMovies()
 
     fun setFavMovie(movieEntity: MovieEntity) {

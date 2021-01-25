@@ -85,7 +85,7 @@ class TvShowFragment : Fragment(), TvShowAdapter.OnItemClickCallback {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             R.id.action_bookmark -> Toast.makeText(context, "!", Toast.LENGTH_SHORT).show()
             R.id.action_bookmark3 -> Toast.makeText(context, "!", Toast.LENGTH_SHORT).show()
             R.id.action_bookmark4 -> Toast.makeText(context, "!", Toast.LENGTH_SHORT).show()

@@ -9,11 +9,11 @@ import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.riyaldi.moviecatalogue.data.source.MovieCatalogueRepository
 import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
 import com.riyaldi.moviecatalogue.utils.DataDummy
-import org.junit.Test
-
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`

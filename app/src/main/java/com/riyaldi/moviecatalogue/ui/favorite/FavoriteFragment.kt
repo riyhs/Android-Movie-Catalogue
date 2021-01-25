@@ -16,11 +16,11 @@ import kotlinx.android.synthetic.main.fragment_favorite.*
 class FavoriteFragment : Fragment() {
 
     private var _favoriteFragmentBinding: FragmentFavoriteBinding? = null
-    private  val binding get() = _favoriteFragmentBinding
+    private val binding get() = _favoriteFragmentBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         _favoriteFragmentBinding = FragmentFavoriteBinding.inflate(layoutInflater, container, false)
         return binding?.root
@@ -40,7 +40,7 @@ class FavoriteFragment : Fragment() {
 
         binding?.viewpager?.adapter = ViewpagerAdapter(fragmentList, requireActivity().supportFragmentManager, lifecycle)
 
-        TabLayoutMediator(tabLayout2, viewpager){tab, position ->
+        TabLayoutMediator(tabLayout2, viewpager) { tab, position ->
             tab.text = tabTitle[position]
         }.attach()
     }

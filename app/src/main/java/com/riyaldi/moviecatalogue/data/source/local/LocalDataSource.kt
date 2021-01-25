@@ -14,7 +14,7 @@ class LocalDataSource(private val mFilmDao: FilmDao) {
         private var INSTANCE: LocalDataSource? = null
 
         fun getInstance(filmDao: FilmDao): LocalDataSource =
-            INSTANCE ?: LocalDataSource(filmDao)
+                INSTANCE ?: LocalDataSource(filmDao)
     }
 
     fun getAllMovies(sort: String): DataSource.Factory<Int, MovieEntity> = mFilmDao.getMovies(SortUtils.getSortedQuery(sort, MOVIE_ENTITIES))
