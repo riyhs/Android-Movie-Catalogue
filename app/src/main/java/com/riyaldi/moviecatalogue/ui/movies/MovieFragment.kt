@@ -19,9 +19,9 @@ import com.riyaldi.moviecatalogue.ui.detail.DetailActivity
 import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.MOVIE
 import com.riyaldi.moviecatalogue.ui.home.HomeActivity
 import com.riyaldi.moviecatalogue.utils.MarginItemDecoration
+import com.riyaldi.moviecatalogue.utils.SortUtils.RANDOM
 import com.riyaldi.moviecatalogue.utils.SortUtils.VOTE_BEST
 import com.riyaldi.moviecatalogue.utils.SortUtils.VOTE_WORST
-import com.riyaldi.moviecatalogue.utils.SortUtils.RANDOM
 import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
 import com.riyaldi.moviecatalogue.vo.Resource
 import com.riyaldi.moviecatalogue.vo.Status
@@ -29,8 +29,8 @@ import com.riyaldi.moviecatalogue.vo.Status
 class MovieFragment : Fragment(), MovieAdapter.OnItemClickCallback {
 
     private lateinit var fragmentMovieBinding: FragmentMovieBinding
-    private lateinit var viewModel : MovieViewModel
-    private lateinit var movieAdapter : MovieAdapter
+    private lateinit var viewModel: MovieViewModel
+    private lateinit var movieAdapter: MovieAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         fragmentMovieBinding = FragmentMovieBinding.inflate(layoutInflater, container, false)
@@ -64,7 +64,7 @@ class MovieFragment : Fragment(), MovieAdapter.OnItemClickCallback {
 
     private val movieObserver = Observer<Resource<PagedList<MovieEntity>>> { movies ->
         if (movies != null) {
-            when(movies.status) {
+            when (movies.status) {
                 Status.LOADING -> showProgressBar(true)
                 Status.SUCCESS -> {
                     showProgressBar(false)
@@ -96,7 +96,7 @@ class MovieFragment : Fragment(), MovieAdapter.OnItemClickCallback {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var sort = ""
-        when(item.itemId) {
+        when (item.itemId) {
             R.id.action_bookmark -> sort = VOTE_BEST
             R.id.action_bookmark3 -> sort = VOTE_WORST
             R.id.action_bookmark4 -> sort = RANDOM

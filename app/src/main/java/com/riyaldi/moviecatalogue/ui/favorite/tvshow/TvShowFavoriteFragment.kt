@@ -24,15 +24,24 @@ class TvShowFavoriteFragment : Fragment(), FavoriteTvShowAdapter.OnItemClickCall
     private var _fragmentTvShowBinding: FragmentTvShowFavoriteBinding? = null
     private val binding get() = _fragmentTvShowBinding
 
-    private lateinit var viewModel : FavoriteTvShowViewModel
+    private lateinit var viewModel: FavoriteTvShowViewModel
     private lateinit var adapter: FavoriteTvShowAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         _fragmentTvShowBinding = FragmentTvShowFavoriteBinding.inflate(layoutInflater, container, false)
         return binding?.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getFavTvShows().observe(viewLifecycleOwner, { favTvShow ->
+            if (favTvShow != null) {
+                adapter.submitList(favTvShow)
+            }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

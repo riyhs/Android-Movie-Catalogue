@@ -8,9 +8,9 @@ import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
 import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
 
 @Database(
-    entities = [MovieEntity::class, TvShowEntity::class],
-    version = 1,
-    exportSchema = false
+        entities = [MovieEntity::class, TvShowEntity::class],
+        version = 1,
+        exportSchema = false
 )
 abstract class FilmDatabase : RoomDatabase() {
     abstract fun filmDao(): FilmDao
@@ -20,8 +20,9 @@ abstract class FilmDatabase : RoomDatabase() {
         private var INSTANCE: FilmDatabase? = null
 
         fun getInstance(context: Context): FilmDatabase =
-            INSTANCE ?: synchronized(this) {
-                INSTANCE ?: Room.databaseBuilder(context.applicationContext, FilmDatabase::class.java, "Film.db").build()
-            }
+                INSTANCE ?: synchronized(this) {
+                    INSTANCE
+                            ?: Room.databaseBuilder(context.applicationContext, FilmDatabase::class.java, "Film.db").build()
+                }
     }
 }

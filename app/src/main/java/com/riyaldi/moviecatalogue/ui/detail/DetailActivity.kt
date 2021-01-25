@@ -69,7 +69,7 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
                 setupState()
                 if (dataCategory == MOVIE) {
                     viewModel.getDetailMovie().observe(this, { detail ->
-                        when(detail.status) {
+                        when (detail.status) {
                             Status.LOADING -> showProgressBar(true)
                             Status.SUCCESS -> {
                                 if (detail.data != null) {
@@ -85,7 +85,7 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
                     })
                 } else if (dataCategory == TV_SHOW) {
                     viewModel.getDetailTvShow().observe(this, { detail ->
-                        when(detail.status) {
+                        when (detail.status) {
                             Status.LOADING -> showProgressBar(true)
                             Status.SUCCESS -> {
                                 if (detail.data != null) {
@@ -106,7 +106,7 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
     }
 
     override fun onClick(v: View?) {
-        when(v?.id) {
+        when (v?.id) {
             R.id.fab_add_to_favorite -> {
                 onFabClicked()
             }
@@ -179,10 +179,10 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
         }
     }
 
-    private fun setupState(){
+    private fun setupState() {
         if (dataCategory == MOVIE) {
             viewModel.getDetailMovie().observe(this, { movie ->
-                when(movie.status) {
+                when (movie.status) {
                     Status.LOADING -> showProgressBar(true)
                     Status.SUCCESS -> {
                         if (movie.data != null) {
@@ -199,7 +199,7 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
             })
         } else if (dataCategory == TV_SHOW) {
             viewModel.getDetailTvShow().observe(this, { tvShow ->
-                when(tvShow.status) {
+                when (tvShow.status) {
                     Status.LOADING -> showProgressBar(true)
                     Status.SUCCESS -> {
                         if (tvShow.data != null) {

@@ -7,7 +7,7 @@ import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
 import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
 import com.riyaldi.moviecatalogue.vo.Resource
 
-class DetailViewModel(private val movieCatalogueRepository: MovieCatalogueRepository): ViewModel() {
+class DetailViewModel(private val movieCatalogueRepository: MovieCatalogueRepository) : ViewModel() {
     companion object {
         const val MOVIE = "movie"
         const val TV_SHOW = "tvShow"

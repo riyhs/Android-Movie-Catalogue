@@ -24,15 +24,24 @@ class MovieFavoriteFragment : Fragment(), FavoriteMovieAdapter.OnItemClickCallba
     private var _fragmentMovieFavoriteBinding: FragmentMovieFavoriteBinding? = null
     private val binding get() = _fragmentMovieFavoriteBinding
 
-    private lateinit var viewModel : FavoriteMovieViewModel
-    private lateinit var adapter : FavoriteMovieAdapter
+    private lateinit var viewModel: FavoriteMovieViewModel
+    private lateinit var adapter: FavoriteMovieAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         _fragmentMovieFavoriteBinding = FragmentMovieFavoriteBinding.inflate(layoutInflater, container, false)
         return binding?.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getFavMovies().observe(viewLifecycleOwner, { favMovies ->
+            if (favMovies != null) {
+                adapter.submitList(favMovies)
+            }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

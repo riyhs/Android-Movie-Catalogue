@@ -22,9 +22,9 @@ class RemoteDataSource {
         private var instance: RemoteDataSource? = null
 
         fun getInstance(): RemoteDataSource =
-            instance ?: synchronized(this) {
-                instance ?: RemoteDataSource()
-            }
+                instance ?: synchronized(this) {
+                    instance ?: RemoteDataSource()
+                }
     }
 
     fun getMovies(): LiveData<ApiResponse<List<Movie>>> {
