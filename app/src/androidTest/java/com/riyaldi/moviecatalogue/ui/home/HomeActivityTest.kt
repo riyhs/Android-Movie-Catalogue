@@ -45,6 +45,7 @@ class HomeActivityTest {
 
     @Test
     fun loadDetailMovie() {
+        onView(withId(R.id.rv_movies)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_movies)).perform(
                 RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
                         0,
@@ -73,6 +74,7 @@ class HomeActivityTest {
     @Test
     fun loadDetailTvShow() {
         onView(withId(R.id.tvShowFragment)).perform(click())
+        onView(withId(R.id.rv_tv_shows)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_tv_shows)).perform(
                 RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
                         0,
@@ -100,6 +102,7 @@ class HomeActivityTest {
 
     @Test
     fun loadDetailFavMovie() {
+        onView(withId(R.id.rv_movies)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_movies)).perform(
                 RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
                         0,
@@ -140,6 +143,7 @@ class HomeActivityTest {
     @Test
     fun loadDetailFavTvShow() {
         onView(withId(R.id.tvShowFragment)).perform(click())
+        onView(withId(R.id.rv_tv_shows)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_tv_shows)).perform(
                 RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
                         0,

@@ -85,7 +85,7 @@ class MovieFavoriteFragment : Fragment(), FavoriteMovieAdapter.OnItemClickCallba
                 val movieEntity = adapter.getSwipedData(swipedPosition)
                 movieEntity?.let { viewModel.setFavMovie(it) }
 
-                val snackBar = Snackbar.make(view as View, R.string.undo, Snackbar.LENGTH_LONG)
+                val snackBar = Snackbar.make(requireView(), R.string.undo, Snackbar.LENGTH_LONG)
                 snackBar.setAction(R.string.ok) { _ ->
                     movieEntity?.let { viewModel.setFavMovie(it) }
                 }

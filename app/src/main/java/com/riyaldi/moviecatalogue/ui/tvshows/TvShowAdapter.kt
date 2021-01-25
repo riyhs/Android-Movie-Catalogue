@@ -56,7 +56,7 @@ class TvShowAdapter : PagedListAdapter<TvShowEntity, TvShowAdapter.TvShowViewHol
                 tvTitle.text = tvShow.name
                 tvGenre.text = tvShow.voteAverage.toString()
 
-                Glide.with(binding.root.context)
+                Glide.with(root.context)
                         .asBitmap()
                         .load(IMAGE_URL + tvShow.posterPath)
                         .apply(RequestOptions.placeholderOf(R.drawable.ic_movie_poster_placeholder))
