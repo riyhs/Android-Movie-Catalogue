@@ -255,7 +255,7 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
-        if (mMaxScrollSize == 0) mMaxScrollSize = appBarLayout!!.totalScrollRange
+        if (mMaxScrollSize == 0) mMaxScrollSize = appBarLayout?.totalScrollRange ?: 0
 
         val currentScrollPercentage: Int = (abs(verticalOffset) * 100 / mMaxScrollSize)
 

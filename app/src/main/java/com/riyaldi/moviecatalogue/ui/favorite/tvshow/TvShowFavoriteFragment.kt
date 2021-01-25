@@ -85,7 +85,7 @@ class TvShowFavoriteFragment : Fragment(), FavoriteTvShowAdapter.OnItemClickCall
                 val tvShowEntity = adapter.getSwipedData(swipedPosition)
                 tvShowEntity?.let { viewModel.setFavTvShow(it) }
 
-                val snackBar = Snackbar.make(view as View, R.string.undo, Snackbar.LENGTH_LONG)
+                val snackBar = Snackbar.make(requireView(), R.string.undo, Snackbar.LENGTH_LONG)
                 snackBar.setAction(R.string.ok) { _ ->
                     tvShowEntity?.let { viewModel.setFavTvShow(it) }
                 }
