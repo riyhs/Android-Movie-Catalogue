@@ -10,6 +10,7 @@ import com.riyaldi.moviecatalogue.R
 import com.riyaldi.moviecatalogue.databinding.FragmentFavoriteBinding
 import com.riyaldi.moviecatalogue.ui.favorite.movie.MovieFavoriteFragment
 import com.riyaldi.moviecatalogue.ui.favorite.tvshow.TvShowFavoriteFragment
+import com.riyaldi.moviecatalogue.ui.home.HomeActivity
 import com.riyaldi.moviecatalogue.ui.home.ViewpagerAdapter
 import kotlinx.android.synthetic.main.fragment_favorite.*
 
@@ -30,6 +31,8 @@ class FavoriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (activity != null) {
+            (activity as HomeActivity).setActionBarTitle("Favorite")
+
             setViewPager()
         }
     }
