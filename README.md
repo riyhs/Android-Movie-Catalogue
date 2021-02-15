@@ -1,5 +1,7 @@
 # Android-Movie-Catalogue
-Movie Catalogue Android App, build with [Kotlin](https://developer.android.com/kotlin) for [Dicoding](https://dicoding.com) Belajar Android Jetpack Pro [(BAJP)](https://www.dicoding.com/academies/129) Final Submission
+Movie Catalogue Android App, build with [Kotlin](https://developer.android.com/kotlin) for [Dicoding](https://dicoding.com) Belajar Android Jetpack Pro [(BAJP)](https://www.dicoding.com/academies/129) Final Submission.
+
+[Download Movie Catalogue App](https://github.com/riyhs/Android-Movie-Catalogue/raw/main/app/build/outputs/apk/debug/app-debug.apk)
 
 ## Technology Used
 ### UI
